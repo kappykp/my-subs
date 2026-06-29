@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>✦ My Subscriptions</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=Geist+Mono:wght@400;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  /* Aurora Dark — Purple-primary, Teal accent, Rose warn */
+  --bg:#080810;
+  --bg2:#0D0D1A;
+  --bg3:#121222;
+  --bg4:#181830;
+  --bd:#1E1E35;
+  --bd2:#252545;
+  --t1:#F0EEFF;
+  --t2:#8B87B8;
+  --t3:#454268;
+
+  /* Primary: Soft Purple */
+  --violet:#C084FC;
+  --violet-dim:#7C3AED;
+  /* Accent: Teal */
+  --mint:#2DD4BF;
+  --mint-dim:#0D9488;
+  /* Warm: Rose */
+  --red:#FB7185;
+  --amber:#FCD34D;
+  --orange:#FB923C;
+  --green:#2DD4BF;
+
+  /* Gradients */
+  --gp:linear-gradient(135deg,#7C3AED,#C084FC);
+  --gg:linear-gradient(135deg,#0D9488,#2DD4BF);
+  --go:linear-gradient(135deg,#FB7185,#FB923C);
+  --gpur:linear-gradient(135deg,#C084FC,#E879F9);
+  --gaur:linear-gradient(135deg,#7C3AED,#2DD4BF,#FB7185);
+
+  /* Holographic glow helpers */
+  --glow-p:0 0 20px rgba(192,132,252,.25),0 0 40px rgba(192,132,252,.1);
+  --glow-t:0 0 20px rgba(45,212,191,.2),0 0 40px rgba(45,212,191,.08);
+  --glow-r:0 0 20px rgba(251,113,133,.2);
+
+  --r:14px;
+  --r-sm:9px;
+}
+html{font-size:16px}
+html,body{line-height:1.55;background:var(--bg);color:var(--t1);font-family:'Inter','IBM Plex Sans Thai',sans-serif;min-height:100vh}
+body{padding-bottom:32px;max-width:900px;margin:0 auto}
+
+/* ── HEADER ── */
+.hdr{padding:env(safe-area-inset-top,0) 0 0;position:sticky;top:0;z-index:100;background:rgba(8,8,16,.95);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(192,132,252,.15)}
+.hdr-inner{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;gap:10px}
+.brand{display:flex;align-items:center}
+.brand h1{font-size:15px;font-weight:600;color:var(--t1)}
+.hdr-right{display:flex;gap:8px;align-items:center}
+
+/* ── BUTTONS ── */
+.btn{border:none;border-radius:50px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .18s;white-space:nowrap;font-family:'Inter','IBM Plex Sans Thai',sans-serif}
+.btn-sm{padding:7px 14px;font-size:13px}
+.btn-md{padding:10px 20px;font-size:14px}
+.btn-p{background:var(--gp);color:#fff;box-shadow:0 4px 20px rgba(192,132,252,.35),0 0 40px rgba(192,132,252,.15)}
+.btn-p:active{opacity:.85;transform:scale(.96)}
+.btn-g{background:var(--gg);color:#fff;box-shadow:0 4px 16px rgba(45,212,191,.3)}
+.btn-g:active{opacity:.85;transform:scale(.96)}
+.btn-ghost{background:var(--bg3);border:1px solid var(--bd2);color:var(--t2)}
+.btn-ghost:active{background:var(--bd2)}
+.btn-icon{width:32px;height:32px;border-radius:50%;background:var(--bg3);border:1px solid var(--bd2);color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s;flex-shrink:0}
+.btn-icon:active{transform:scale(.88)}
+.btn-icon.i-del{background:rgba(224,108,108,.07);border-color:rgba(224,108,108,.18);color:var(--red)}
+.btn-icon.i-cancel{background:rgba(212,131,74,.07);border-color:rgba(212,131,74,.18);color:var(--orange)}
+.btn-icon.i-restore{background:rgba(78,173,164,.07);border-color:rgba(45,212,191,.2);color:var(--mint)}
+
+/* ── TOGGLE ── */
+.view-toggle{background:var(--bg3);border:1px solid var(--bd2);border-radius:50px;padding:3px;display:flex;align-items:center;position:relative;cursor:pointer}
+.vt-opt{padding:5px 14px;border-radius:50px;font-size:12px;font-weight:500;color:var(--t3);transition:color .25s;position:relative;z-index:1;user-select:none}
+.vt-opt.on{color:#fff}
+.vt-slider{position:absolute;top:3px;bottom:3px;border-radius:50px;background:var(--gp);box-shadow:0 2px 10px rgba(107,127,212,.35);transition:left .28s cubic-bezier(.34,1.56,.64,1),width .28s cubic-bezier(.34,1.56,.64,1);z-index:0}
+
+/* ── SUMMARY BAR ── */
+.sum-bar{display:flex;align-items:stretch;padding:0;min-height:44px;border-bottom:1px solid rgba(192,132,252,.12);overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch;position:sticky;top:var(--hdr-h,48px);z-index:90;background:rgba(8,8,16,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.sum-bar::-webkit-scrollbar{display:none}
+.sb-item{display:flex;flex-direction:column;justify-content:center;gap:1px;padding:0 14px;border-right:1px solid var(--bd);white-space:nowrap;flex-shrink:0}
+.sb-item:last-child{border-right:none}
+.sb-lbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;font-weight:500}
+.sb-val{font-family:'Geist Mono',monospace;font-size:14px;font-weight:600;line-height:1}
+.sb-val.gp{background:linear-gradient(135deg,#C084FC,#E879F9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sb-val.gg{background:linear-gradient(135deg,#2DD4BF,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sb-val.gpur{background:linear-gradient(135deg,#FB7185,#FB923C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* budget item — opens bottom sheet on tap */
+.budget-bar-wrap{flex:1;min-width:130px;max-width:260px;padding:0 14px;display:flex;flex-direction:column;justify-content:center;gap:4px;border-right:1px solid var(--bd)}
+.budget-top-row{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.budget-lbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;font-weight:500;display:flex;align-items:center;gap:3px}
+.budget-lbl span{font-family:'Geist Mono',monospace;font-size:13px;font-weight:600;color:var(--t2);text-transform:none;letter-spacing:0}
+.budget-lbl em{font-size:9px;opacity:.3;font-style:normal}
+.budget-remain{font-size:13px;font-weight:600;font-family:'Geist Mono',monospace;color:var(--t2)}
+.budget-bar-track{height:4px;background:var(--bd2);border-radius:2px;overflow:hidden;position:relative;flex-shrink:0}
+.budget-bar-track div{position:absolute;top:0;height:100%;border-radius:2px;transition:width .4s,left .4s,background .4s}
+
+/* ── SUMMARY SHEET ── */
+/* range picker */
+.sum-range-row{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.sum-range-sep{color:var(--t3);font-size:14px;flex-shrink:0}
+.sum-range-pick{flex:1;display:flex;flex-direction:column;gap:4px}
+.sum-range-pick label{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px}
+.sum-month-picker{background:var(--bg3);border:1.5px solid var(--bd2);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.sum-picker-year-row{display:flex;align-items:center;justify-content:space-between}
+.sum-picker-year-lbl{font-size:14px;font-weight:600;color:var(--t1);font-family:'Geist Mono',monospace}
+.sum-picker-year-btn{background:none;border:1px solid var(--bd2);border-radius:6px;width:26px;height:26px;color:var(--t2);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.sum-picker-year-btn:active{background:var(--bd2)}
+.sum-picker-months{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.sum-pmo{padding:7px 4px;background:var(--bg4);border:1.5px solid transparent;border-radius:7px;color:var(--t3);font-size:12px;cursor:pointer;text-align:center;transition:all .15s}
+.sum-pmo.sel{border-color:var(--violet);background:rgba(124,111,247,.12);color:var(--t1);font-weight:600}
+.sum-pmo.today{border-color:var(--mint)}
+.sum-pmo:active{transform:scale(.92)}
+.sum-range-result{background:var(--bg3);border-radius:10px;padding:13px 14px;margin-top:4px}
+.sum-range-count{font-size:11px;color:var(--t3);margin-bottom:10px}
+.sum-app-row-v2{display:flex;justify-content:space-between;align-items:flex-start;font-size:13px;margin-bottom:8px}
+.sum-app-sub{font-size:10px;color:var(--t3);margin-top:2px;display:block}
+.paid-tag{color:var(--mint)}
+.fc-tag{color:var(--amber)}
+.sum-breakdown{border-top:1px solid var(--bd);margin-top:10px;padding-top:10px;display:flex;flex-direction:column;gap:5px}
+.sum-bd-row{display:flex;justify-content:space-between;font-size:13px;color:var(--t3)}
+.sum-bd-row.total{color:var(--t1);font-weight:600;font-size:14px;margin-top:3px}
+.sum-bd-val{font-family:'Geist Mono',monospace;font-weight:600}
+.sum-bd-val.paid{color:var(--mint)}
+.sum-bd-val.fc{color:var(--amber)}
+
+/* budget bottom sheet */
+.budget-current-display{background:var(--bg3);border-radius:12px;padding:14px 16px;margin-bottom:14px;text-align:center}
+.budget-current-lbl{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.budget-current-val{font-family:'Geist Mono',monospace;font-size:26px;font-weight:600;color:var(--t1)}
+.btab-bar{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px}
+.btab{padding:9px;border:1.5px solid var(--bd2);border-radius:9px;background:var(--bg3);color:var(--t3);font-size:13px;font-weight:500;cursor:pointer;transition:all .18s;font-family:'Inter','IBM Plex Sans Thai',sans-serif}
+.btab.on{background:rgba(124,111,247,.1);border-color:var(--violet);color:var(--violet);font-weight:600}
+.budget-main-input{font-family:'Geist Mono',monospace;font-size:20px;font-weight:600;text-align:center}
+.budget-input-hint{font-size:12px;color:var(--t3);margin-top:7px;text-align:center}
+.budget-input-hint span{color:var(--t2);font-weight:600;font-family:'Geist Mono',monospace}
+.budget-log-trigger{width:100%;background:none;border:none;color:var(--t2);font-size:13px;padding:13px 4px;text-align:left;cursor:pointer;transition:color .15s;border-top:1px solid var(--bd);margin-top:16px}
+.budget-log-trigger:active{color:var(--t1)}
+.budget-log-list{display:flex;flex-direction:column;gap:2px;max-height:200px;overflow-y:auto;margin-top:4px}
+.budget-log-row{display:flex;justify-content:space-between;align-items:center;padding:9px 4px;border-bottom:1px solid var(--bd)}
+.budget-log-info{min-width:0}
+.budget-log-note{font-size:12px;color:var(--t2)}
+.budget-log-date{font-size:10px;color:var(--t3);margin-top:1px}
+.budget-log-delta{font-family:'Geist Mono',monospace;font-size:13px;font-weight:600;flex-shrink:0;margin-left:10px}
+.budget-log-empty{text-align:center;color:var(--t3);font-size:12px;padding:18px}
+
+/* ── STATS FLIP BTN ── */
+.stats-flip-btn{background:var(--bg3);border:1px solid var(--bd2);border-radius:50%;width:24px;height:24px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--t2);transition:all .15s}
+.stats-flip-btn:active{transform:scale(.88);background:var(--bd2)}
+.chart-txt-btn{background:var(--bg3);border:1px solid var(--bd2);border-radius:7px;padding:4px 10px;font-size:11px;font-weight:500;color:var(--t2);cursor:pointer;transition:all .15s;font-family:'Inter','IBM Plex Sans Thai',sans-serif}
+.chart-txt-btn:active{background:var(--bd2);color:var(--t1)}
+
+/* ── STATS STACK CARD (all apps, one card) ── */
+.stat-all-card{padding:4px 2px 2px}
+.stat-all-hdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--bd)}
+.stat-all-hdr span:first-child{font-size:12px;color:var(--t3)}
+.stat-all-total{font-family:'Geist Mono',monospace;font-size:17px;font-weight:600;color:var(--t1)}
+.stat-all-list{display:flex;flex-direction:column;gap:12px;max-height:340px;overflow-y:auto}
+.stat-row{display:flex;align-items:center;gap:11px;text-decoration:none;color:inherit;cursor:pointer}
+.stat-row-info{flex:1;min-width:0}
+.stat-row-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:5px}
+.stat-row-name{font-size:14px;font-weight:500;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stat-row-val{font-family:'Geist Mono',monospace;font-size:14px;font-weight:600;color:var(--t1);flex-shrink:0}
+.stat-row-bar-track{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-bottom:5px}
+.stat-row-bar-fill{height:100%;background:var(--gp);border-radius:2px;transition:width .4s}
+.stat-row-sub{font-size:11px;color:var(--t3)}
+
+/* ── CHART ── */
+.chart-wrap{margin:12px 16px;background:var(--bg2);border:1px solid rgba(192,132,252,.1);border-radius:var(--r);padding:14px 16px;overflow-x:auto}
+.chart-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.chart-title{font-size:11px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.6px}
+.mgrid{display:grid;grid-template-columns:repeat(12,1fr);gap:6px;min-width:480px}
+.mcol{text-align:center}
+.mlbl{font-size:11px;color:var(--t3);margin-bottom:5px}
+.mlbl.cur{color:var(--violet);font-weight:600;font-size:12px}
+.bwrap{height:54px;display:flex;align-items:flex-end;justify-content:center;position:relative}
+.mbar{width:80%;border-radius:4px 4px 0 0;min-height:3px;transition:opacity .2s}
+.mamt{font-size:10px;color:var(--t3);margin-top:4px;font-family:'Geist Mono',monospace}
+
+/* ── SECTION ── */
+.sec{margin-bottom:4px}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px;cursor:pointer;user-select:none}
+.sec-hdr-l{display:flex;align-items:center;gap:8px}
+.sec-ttl{font-size:15px;font-weight:600;color:var(--t1)}
+.sec-cnt{font-size:12px;background:var(--bg3);color:var(--t3);padding:2px 8px;border-radius:50px;border:1px solid var(--bd2);font-weight:400}
+.chev{font-size:11px;color:var(--t3);opacity:.7;transition:transform .22s;display:inline-block}
+.chev.open{transform:rotate(90deg)}
+.sec-body{display:block}.sec-body.collapsed{display:none}
+.sec-body-inner{padding:0 16px 10px}
+
+/* ── DESKTOP TABLE ── */
+@media(min-width:680px){
+  .mobile-cards{display:none!important}
+  .desktop-table{display:table!important}
+  body{padding-bottom:40px}
+}
+@media(max-width:679px){
+  .desktop-table{display:none!important}
+  .mobile-cards{display:flex!important;flex-direction:column;gap:8px}
+}
+.desktop-table{width:100%;border-collapse:separate;border-spacing:0 2px;display:none}
+.desktop-table thead th{font-size:11px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;padding:8px 10px;border-bottom:1px solid var(--bd);text-align:left;background:transparent}
+.th-sort{cursor:pointer;user-select:none}
+.th-sort:hover{color:var(--t2)}
+.sort-arr{font-size:10px;color:#C084FC;margin-left:3px;font-family:"Geist Mono",monospace}
+.desktop-table thead th.r{text-align:right}
+.desktop-table tbody tr{background:var(--bg2);transition:background .15s;cursor:pointer}
+.desktop-table tbody tr:hover{background:rgba(192,132,252,.05);border-color:rgba(192,132,252,.08)}
+.desktop-table tbody tr.drag-over-row{outline:1px solid var(--violet);background:rgba(107,127,212,.06)}
+.desktop-table tbody tr.drag-src{opacity:.3}
+.desktop-table tbody td{padding:12px 10px;border-bottom:1px solid var(--bd);vertical-align:middle;font-size:14px}
+.desktop-table tbody tr:last-child td{border-bottom:none}
+.dh{cursor:ns-resize;color:var(--bd2);font-size:15px;padding:0 4px;user-select:none}
+.logo-cell{display:flex;align-items:center;gap:9px}
+.logo{width:30px;height:30px;border-radius:8px;background:var(--bg3);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;border:1px solid var(--bd)}
+.logo svg{display:block}
+.app-nm{font-size:14px;font-weight:500;color:var(--t1)}
+.app-nt{font-size:12px;color:var(--t3);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
+.price-td{font-family:'Geist Mono',monospace;font-size:14px;font-weight:600;text-align:right;white-space:nowrap;color:var(--t1)}
+.price-td .pp{font-size:11px;color:var(--t3);font-weight:400}
+.tbd-warn{color:#FCD34D;font-size:12px;font-weight:600;background:rgba(252,211,77,.1);padding:2px 7px;border-radius:6px;cursor:help}
+.pay-tag{font-size:11px;padding:2px 8px;border-radius:50px;font-weight:400;white-space:nowrap;display:inline-block;background:var(--bg3);color:var(--t2);border:1px solid var(--bd2)}
+.renew-cell{display:inline-flex;align-items:center;font-size:11px;font-weight:500;padding:3px 10px;border-radius:50px;white-space:nowrap}
+.renew-cell.ok{color:#2DD4BF;background:rgba(45,212,191,.1)}
+.renew-cell.warn{color:#FCD34D;background:rgba(252,211,77,.1)}
+.renew-cell.urgent{color:#FB7185;background:rgba(251,113,133,.12)}
+.renew-cell.none{color:var(--t3);background:var(--bg3)}
+.renew-date-wrap{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.renew-date-txt{font-size:12px;color:var(--t2)}
+.renew-pill{font-size:12px;font-weight:600;padding:2px 8px;border-radius:50px;white-space:nowrap;font-family:'Geist Mono',monospace}
+.renew-pill.ok{color:#2DD4BF;background:rgba(45,212,191,.12)}
+.renew-pill.warn{color:#FCD34D;background:rgba(252,211,77,.12)}
+.renew-pill.urgent{color:#FB7185;background:rgba(251,113,133,.14)}
+.act-td{display:flex;gap:4px;justify-content:flex-end}
+.canc-row td{opacity:.4}
+.canc-row:hover td{opacity:.65}
+.clickrow{cursor:pointer}
+
+/* ── MOBILE CARD ── */
+.mcard{background:var(--bg2);border:1px solid var(--bd);border-top-width:2px;border-radius:var(--r);padding:13px 14px 14px;position:relative;overflow:hidden;cursor:pointer;transition:border-color .18s,transform .1s}
+.mcard:active{transform:scale(.986)}
+.mcard.act{border-top-color:#2DD4BF}
+.mcard.pend{border-top-color:#C084FC}
+.mcard.canc{border-top-color:var(--bd2)}
+.mcard-top{display:flex;align-items:center;gap:11px}
+.mlogo{width:42px;height:42px;border-radius:11px;background:var(--bg3);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;border:1px solid var(--bd)}
+.mlogo svg{display:block}
+.mcard-info{flex:1;min-width:0}
+.mcard-name{font-size:15px;font-weight:600;color:var(--t1)}
+.mcard-sub{font-size:12px;color:var(--t2);margin-top:2px}
+.mcard-note{font-size:12px;color:var(--amber);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.85}
+.mcard-price{font-family:'Geist Mono',monospace;font-size:16px;font-weight:600;color:var(--t1);text-align:right;flex-shrink:0}
+.mcard-price .pp{font-size:11px;color:var(--t3);font-weight:400}
+.mcard-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:10px;gap:6px}
+.mcard-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.renew-inline{font-size:11px;font-weight:500;padding:2px 9px;border-radius:50px;white-space:nowrap}
+.renew-inline.ok{color:#2DD4BF;background:rgba(45,212,191,.1)}
+.renew-inline.warn{color:#FCD34D;background:rgba(252,211,77,.1)}
+.renew-inline.urgent{color:#FB7185;background:rgba(251,113,133,.12)}
+.renew-inline.none{color:var(--t3);background:var(--bg3)}
+.mcard-acts{display:flex;gap:5px;align-items:center}
+.reorder-btns{display:flex;flex-direction:column;gap:2px;flex-shrink:0}
+.reorder-btn{width:24px;height:20px;background:var(--bg4);border:1px solid var(--bd2);border-radius:5px;color:var(--t3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;padding:0}
+.reorder-btn:active{background:var(--bd2)}
+
+/* ── HISTORY ── */
+.hist-box{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.hist-row{padding:13px 14px;border-bottom:1px solid var(--bd)}
+.hist-row:last-child{border-bottom:none}
+.hist-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px}
+.hist-range{font-size:14px;font-weight:600;color:var(--t1);display:flex;align-items:center;gap:8px}
+.hist-app-count{font-size:11px;font-weight:400;color:var(--t3);background:var(--bg4);border:1px solid var(--bd2);padding:1px 7px;border-radius:50px}
+.hist-date{font-size:11px;color:var(--t3);margin-top:2px}
+.hist-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.hist-total{font-family:'Geist Mono',monospace;font-size:15px;font-weight:600;background:var(--gpur);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.paid-tog{font-size:12px;font-weight:500;padding:4px 11px;border-radius:50px;cursor:pointer;border:none;transition:all .18s;font-family:'Inter','IBM Plex Sans Thai',sans-serif}
+.paid-tog.np{background:var(--bg3);color:var(--t3);border:1px solid var(--bd2)}
+.paid-tog.pd{background:rgba(78,173,164,.09);color:var(--mint);border:1px solid rgba(78,173,164,.22)}
+.hist-items{display:flex;flex-direction:column;gap:4px}
+.hist-it{display:flex;align-items:center;justify-content:space-between;font-size:13px}
+.hist-it-nm{color:var(--t2);display:flex;align-items:center;gap:5px}
+.hist-it-nm::before{content:'';width:3px;height:3px;border-radius:50%;background:var(--bd2);display:inline-block}
+.hist-it-pr{font-family:'Geist Mono',monospace;color:var(--t2)}
+.hist-empty{padding:28px;text-align:center;color:var(--t3);font-size:13px;line-height:1.7}
+
+/* ── MODAL ── */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.modal-ov.open{display:flex}
+@media(min-width:600px){.modal-ov{align-items:center;padding:20px}.modal-box{border-radius:var(--r)!important;max-width:480px!important}}
+.modal-box{background:var(--bg2);border:1px solid rgba(192,132,252,.2);border-radius:20px 20px 0 0;box-shadow:0 -8px 40px rgba(192,132,252,.1),0 -2px 0 rgba(192,132,252,.15);padding:20px 20px calc(20px + env(safe-area-inset-bottom,0px));width:100%;max-width:100%;max-height:92vh;overflow-y:auto;transition:transform .28s cubic-bezier(.32,1.04,.64,1);transform:translateY(100%)}
+.modal-ov.open .modal-box{transform:translateY(0)}
+.modal-ttl{font-size:11px;font-weight:500;color:var(--t3);margin-bottom:14px;letter-spacing:.5px;text-transform:uppercase}
+.fl{margin-bottom:13px}
+.fl label{font-size:11px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px}
+.fi,.fs{width:100%;background:var(--bg3);border:1.5px solid var(--bd2);border-radius:10px;color:var(--t1);font-size:15px;padding:10px 12px;outline:none;font-family:'Inter','IBM Plex Sans Thai',sans-serif;-webkit-appearance:none;appearance:none;transition:border-color .18s}
+.fi:focus,.fs:focus{border-color:rgba(192,132,252,.6);background:rgba(192,132,252,.05);box-shadow:0 0 0 3px rgba(192,132,252,.1)}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:13px}
+.modal-acts{display:flex;gap:10px;margin-top:18px}
+.modal-acts .btn{flex:1;justify-content:center;padding:12px;font-size:15px}
+.contract-pick{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.cp-opt{padding:11px 13px;background:var(--bg3);border:1.5px solid var(--bd2);border-radius:11px;cursor:pointer;transition:all .2s;text-align:center}
+.cp-opt.on{background:rgba(107,127,212,.09);border-color:var(--violet)}
+.cp-opt .cm{font-size:14px;font-weight:500;color:var(--t1)}
+.cp-opt .cs{font-size:12px;color:var(--t3);margin-top:3px}
+.cp-opt.on .cm{color:#C084FC}
+.price-type-pick{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px}
+.pt-opt{padding:9px 12px;background:var(--bg3);border:1.5px solid var(--bd2);border-radius:11px;cursor:pointer;transition:all .2s;text-align:center}
+.pt-opt.on{background:rgba(107,127,212,.09);border-color:var(--violet)}
+.pt-opt .pm{font-size:13px;font-weight:500;color:var(--t1)}
+.pt-opt .ps{font-size:12px;color:var(--t3);margin-top:2px}
+.pt-opt.on .pm{color:#C084FC}
+.custom-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:8px}
+.cg-cell{display:flex;flex-direction:column;gap:3px}
+.cg-cell label{font-size:11px;color:var(--t3);font-weight:400;display:flex;align-items:baseline;gap:4px}
+.cg-lbl-future{display:flex!important;align-items:baseline;gap:4px}
+.cg-num{font-family:'Geist Mono',monospace;font-size:12px;font-weight:600;color:var(--violet);min-width:13px}
+.cg-mo{font-size:10px;color:var(--t3)}
+.cg-lbl-past{font-size:11px;color:var(--t3);opacity:.7}
+.cg-cell input{background:var(--bg3);border:1.5px solid var(--bd2);border-radius:7px;color:var(--t1);font-size:14px;padding:6px 8px;outline:none;font-family:'Geist Mono',monospace;width:100%;-webkit-appearance:none;appearance:none}
+.cg-cell input:focus{border-color:var(--violet)}
+#yearly-cancel-info{border-radius:9px;border:1px solid rgba(107,127,212,.15);background:rgba(107,127,212,.05)}
+.form-divider{font-size:10px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.6px;margin:4px 0 9px;padding-bottom:6px;border-bottom:1px solid var(--bd)}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr" id="main-hdr">
+  <div class="hdr-inner">
+    <div class="brand">
+      <h1>My Subscriptions</h1>
+    </div>
+    <div class="hdr-right">
+      <span id="sync-status" style="font-size:10px;color:var(--t3);font-family:'Geist Mono',monospace;opacity:.7"></span>
+      <div class="view-toggle" id="view-toggle" onclick="flipView()">
+        <div class="vt-slider" id="vt-slider"></div>
+        <div class="vt-opt on" id="vt-monthly">รายเดือน</div>
+        <div class="vt-opt" id="vt-yearly">รายปี</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FROZEN SUMMARY BAR -->
+<div class="sum-bar">
+  <div class="sb-item">
+    <span class="sb-lbl" id="sb-lbl-total">เดือนนี้</span>
+    <span class="sb-val gp" id="s-total">฿0</span>
+  </div>
+  <div class="sb-item sb-item-apps">
+    <span class="sb-lbl">ใช้งานอยู่</span>
+    <span class="sb-val gg" id="s-active">0</span>
+  </div>
+  <div class="sb-item">
+    <span class="sb-lbl">Paid</span>
+    <span class="sb-val gpur" id="s-spent">฿0</span>
+  </div>
+  <div class="budget-bar-wrap">
+    <div class="budget-top-row" onclick="openBudgetSheet()">
+      <span class="budget-lbl">งบคงเหลือ <span id="s-budget-lbl">฿30k</span> <em>⋯</em></span>
+      <span class="budget-remain" id="s-remain">฿0</span>
+    </div>
+    <div class="budget-bar-track">
+      <div id="bfp" style="left:0;width:0%"></div>
+      <div id="bfc" style="opacity:.5;width:0%"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CHART / STATS TOGGLE -->
+<div class="chart-wrap">
+  <div class="chart-top">
+    <span class="chart-title" id="chart-title-text">Forecast 12 เดือนข้างหน้า</span>
+    <div style="display:flex;align-items:center;gap:6px">
+      <button class="chart-txt-btn" onclick="openSummarySheet()">สรุป</button>
+      <button class="chart-txt-btn" onclick="flipChartView()" id="stats-flip-btn">สถิติ</button>
+    </div>
+  </div>
+  <div class="mgrid" id="mgrid"></div>
+  <div class="stats-stack" id="stats-stack" style="display:none"></div>
+</div>
+
+<!-- ACTIVE -->
+<div class="sec">
+  <div class="sec-hdr" onclick="togSec('active-body','cv-a')">
+    <div class="sec-hdr-l"><span class="chev open" id="cv-a">›</span><span class="sec-ttl">✅ Active</span><span class="sec-cnt" id="cnt-a">0</span></div>
+    <button class="btn btn-sm btn-g" onclick="openModal('active');event.stopPropagation()">＋ เพิ่ม</button>
+  </div>
+  <div class="sec-body" id="active-body">
+    <div class="sec-body-inner">
+      <table class="desktop-table">
+        <thead><tr><th style="width:18px"></th><th>App</th><th class="r th-sort" onclick="toggleSort('price')"><span>ราคา</span> <span id="sort-arr-price" class="sort-arr"></span></th><th class="th-sort" onclick="toggleSort('renew')"><span>Renew</span> <span id="sort-arr-renew" class="sort-arr"></span></th><th>Contract</th><th>ช่องทาง</th><th class="r">จัดการ</th></tr></thead>
+        <tbody id="dtb-active"></tbody>
+      </table>
+      <div class="mobile-cards" id="mc-active"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PENDING -->
+<div class="sec">
+  <div class="sec-hdr" onclick="togSec('pending-body','cv-p')">
+    <div class="sec-hdr-l"><span class="chev open" id="cv-p">›</span><span class="sec-ttl" style="color:var(--orange)">⏳ Pending</span><span class="sec-cnt" id="cnt-p">0</span></div>
+    <button class="btn btn-sm btn-ghost" onclick="openModal('pending');event.stopPropagation()">＋ เพิ่ม</button>
+  </div>
+  <div class="sec-body" id="pending-body">
+    <div class="sec-body-inner">
+      <table class="desktop-table">
+        <thead><tr><th style="width:18px"></th><th>App</th><th class="r th-sort" onclick="toggleSort('price')"><span>ราคา</span> <span id="sort-arr-price" class="sort-arr"></span></th><th class="th-sort" onclick="toggleSort('renew')"><span>Renew</span> <span id="sort-arr-renew" class="sort-arr"></span></th><th>Contract</th><th>ช่องทาง</th><th class="r">จัดการ</th></tr></thead>
+        <tbody id="dtb-pending"></tbody>
+      </table>
+      <div class="mobile-cards" id="mc-pending"></div>
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY -->
+<div class="sec">
+  <div class="sec-hdr" onclick="togSec('hist-body','cv-h')">
+    <div class="sec-hdr-l"><span class="chev open" id="cv-h">›</span><span class="sec-ttl" style="color:var(--purple)">📅 Billing History</span><span class="sec-cnt" id="cnt-h">0</span></div>
+  </div>
+  <div class="sec-body" id="hist-body">
+    <div class="sec-body-inner">
+      <div class="hist-box" id="hist-box"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CANCELLED -->
+<div class="sec">
+  <div class="sec-hdr" onclick="togSec('cancelled-body','cv-c')">
+    <div class="sec-hdr-l"><span class="chev" id="cv-c">›</span><span class="sec-ttl" style="color:var(--t3)">🚫 Cancelled</span><span class="sec-cnt" id="cnt-c">0</span></div>
+    <button class="btn btn-sm btn-ghost" onclick="openModal('cancelled');event.stopPropagation()">＋ เพิ่ม</button>
+  </div>
+  <div class="sec-body collapsed" id="cancelled-body">
+    <div class="sec-body-inner">
+      <table class="desktop-table">
+        <thead><tr><th style="width:18px"></th><th>App</th><th class="r">ราคา</th><th>ยกเลิก</th><th>Contract</th><th>ช่องทาง</th><th class="r">จัดการ</th></tr></thead>
+        <tbody id="dtb-cancelled"></tbody>
+      </table>
+      <div class="mobile-cards" id="mc-cancelled"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL -->
+<div class="modal-ov" id="modal" onclick="onOvClick(event)">
+  <div class="modal-box" id="modal-box">
+    <div class="modal-ttl" id="modal-ttl">เพิ่มรายการ</div>
+
+    <input class="fi" id="f-name" type="text" placeholder="ชื่อ Service..." style="font-size:18px;font-weight:600;margin-bottom:14px;background:transparent;border-color:transparent;border-bottom:1.5px solid var(--bd2);border-radius:0;padding:4px 0">
+
+    <!-- Part 1: Contract type -->
+    <div class="fl" style="margin-bottom:0">
+      <div class="contract-pick">
+        <div class="cp-opt on" data-v="monthly" onclick="selContract(this)"><div class="cm">Monthly</div><div class="cs">ยกเลิกได้ทุกเมื่อ</div></div>
+        <div class="cp-opt" data-v="yearly" onclick="selContract(this)"><div class="cm">Yearly</div><div class="cs">สัญญารายปี</div></div>
+      </div>
+      <input type="hidden" id="f-cycle" value="monthly">
+    </div>
+
+    <!-- Part 2: Price type -->
+    <div style="margin-top:14px;margin-bottom:8px"></div>
+    <div class="price-type-pick">
+      <div class="pt-opt on" data-v="fixed" onclick="selPriceType(this)"><div class="pm">คงที่</div><div class="ps">ราคาเดียวตลอด</div></div>
+      <div class="pt-opt" data-v="custom" onclick="selPriceType(this)"><div class="pm">Custom</div><div class="ps">ราคาแตกต่างรายเดือน</div></div>
+    </div>
+    <input type="hidden" id="f-pricetype" value="fixed">
+
+    <!-- Fixed price row -->
+    <div id="price-fixed">
+      <div class="fl"><label>ราคาต่อเดือน (บาท)</label>
+        <input class="fi" id="f-price" type="number" placeholder="0" step="0.01" inputmode="decimal">
+      </div>
+    </div>
+
+    <!-- Custom price grid -->
+    <div id="price-custom" style="display:none">
+      <label style="font-size:10px;color:var(--t3);display:block;margin-bottom:4px">ราคา ฿ / เดือน</label>
+      <div id="custom-grid"></div>
+    </div>
+
+    <!-- Other fields -->
+    <div style="margin-top:14px"></div>
+    <div class="f2">
+      <div class="fl" style="margin:0"><label>ช่องทาง</label>
+        <select class="fs" id="f-payment"><option value="AIS">AIS</option><option value="Credit Card">Credit Card</option><option value="Other">Other</option></select>
+      </div>
+      <div class="fl" style="margin:0"><label>Renew Date</label>
+        <input class="fi" id="f-renew" type="date" oninput="updateYearlyCancelInfo()">
+      </div>
+    </div>
+    <div id="yearly-cancel-info" style="display:none;font-size:11px;color:var(--t3);background:var(--bg3);border-radius:7px;padding:7px 10px;margin-bottom:13px">
+      🔒 ยกเลิกได้หลัง <span id="yearly-cancel-date" style="color:var(--t2);font-weight:600"></span>
+    </div>
+    <div class="f2">
+      <div class="fl" style="margin:0"><label>Status</label>
+        <select class="fs" id="f-status">
+          <option value="active">✅ Active</option>
+          <option value="pending">⏳ Pending</option>
+          <option value="cancelled">🚫 Cancelled</option>
+        </select>
+      </div>
+      <div class="fl" style="margin:0"><label>Cancel Date</label>
+        <input class="fi" id="f-cancel" type="date" oninput="validateCancelDate()">
+      </div>
+    </div>
+    <div class="fl"><label>หมายเหตุ</label>
+      <input class="fi" id="f-note" type="text" placeholder="โปรโมชั่น, เงื่อนไขพิเศษ...">
+    </div>
+    <div class="modal-acts">
+      <button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button>
+      <button class="btn btn-p" onclick="saveItem()">บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUMMARY BOTTOM SHEET -->
+<div class="modal-ov" id="sum-modal" onclick="if(event.target===this)closeSummarySheet()">
+  <div class="modal-box">
+    <div class="modal-ttl">สรุปยอดจ่าย</div>
+
+    <!-- RANGE VIEW -->
+    <div id="sum-range-view">
+      <div class="sum-range-row">
+        <div class="sum-range-pick">
+          <label>เริ่มต้น</label>
+          <div class="sum-month-picker" id="sum-pick-start">
+            <div class="sum-picker-year-row">
+              <button class="sum-picker-year-btn" onclick="shiftPickerYear('start',-1)">‹</button>
+              <span class="sum-picker-year-lbl" id="sum-start-yr">2026</span>
+              <button class="sum-picker-year-btn" onclick="shiftPickerYear('start',1)">›</button>
+            </div>
+            <div class="sum-picker-months" id="sum-start-months"></div>
+          </div>
+        </div>
+        <div class="sum-range-sep">→</div>
+        <div class="sum-range-pick">
+          <label>สิ้นสุด</label>
+          <div class="sum-month-picker" id="sum-pick-end">
+            <div class="sum-picker-year-row">
+              <button class="sum-picker-year-btn" onclick="shiftPickerYear('end',-1)">‹</button>
+              <span class="sum-picker-year-lbl" id="sum-end-yr">2026</span>
+              <button class="sum-picker-year-btn" onclick="shiftPickerYear('end',1)">›</button>
+            </div>
+            <div class="sum-picker-months" id="sum-end-months"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sum-range-result" id="sum-range-result"></div>
+    </div>
+
+    <div class="modal-acts" style="margin-top:20px">
+      <button class="btn btn-ghost" onclick="closeSummarySheet()">ปิด</button>
+    </div>
+  </div>
+</div>
+
+<!-- BUDGET BOTTOM SHEET -->
+<div class="modal-ov" id="budget-modal" onclick="onBudgetOvClick(event)">
+  <div class="modal-box" id="budget-modal-box">
+
+    <div class="budget-current-display">
+      <div class="budget-current-lbl">งบรวมตอนนี้</div>
+      <div class="budget-current-val" id="bsheet-current-val">฿30,000</div>
+    </div>
+
+    <!-- Tab bar -->
+    <div class="btab-bar">
+      <button class="btab on" id="btab-add" onclick="switchBudgetTab('add')">เติมงบ</button>
+      <button class="btab" id="btab-set" onclick="switchBudgetTab('set')">ตั้งยอดใหม่</button>
+    </div>
+
+    <!-- Tab: เติมงบ -->
+    <div id="btab-add-panel">
+      <div class="fl">
+        <label>จำนวนที่เติม (บาท)</label>
+        <input class="fi budget-main-input" id="bsheet-add-input" type="number" inputmode="decimal" placeholder="เช่น 5000" min="0" oninput="updateBudgetPreview()">
+        <div class="budget-input-hint">งบใหม่จะเป็น <span id="bsheet-preview">—</span></div>
+      </div>
+    </div>
+
+    <!-- Tab: ตั้งยอดใหม่ -->
+    <div id="btab-set-panel" style="display:none">
+      <div class="fl">
+        <label>ยอดงบรวมที่ต้องการ (บาท)</label>
+        <input class="fi budget-main-input" id="bsheet-set-input" type="number" inputmode="decimal" placeholder="เช่น 30000" min="0">
+        <div class="budget-input-hint">แทนที่ยอดเดิม ฿<span id="bsheet-old-val">0</span> ทั้งหมด</div>
+      </div>
+    </div>
+
+    <div class="modal-acts">
+      <button class="btn btn-ghost" onclick="closeBudgetSheet()">ยกเลิก</button>
+      <button class="btn btn-p" onclick="saveBudgetSheet()">บันทึก</button>
+    </div>
+
+    <button class="budget-log-trigger" onclick="toggleBudgetLog()" id="bsheet-log-toggle">🧾 ประวัติ</button>
+    <div id="bsheet-log-list" class="budget-log-list" style="display:none"></div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════════════════
+function safeGet(id){return document.getElementById(id);}
+function safeVal(id){var el=safeGet(id);return el?el.value:'';}
+
+// ════════════════════════════════════════════════
+// CONSTANTS
+// ════════════════════════════════════════════════
+var TODAY=new Date();
+var MONTH_TH=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+var BUDGET=parseInt(localStorage.getItem("budget_v7")||"30000");
+function loadBudgetLog(){try{var b=localStorage.getItem('budgetlog_v7');return b?JSON.parse(b):[];}catch(e){return [];}}
+function saveBudgetLog(){try{localStorage.setItem('budgetlog_v7',JSON.stringify(budgetLog));}catch(e){}sbSave();}
+var budgetLog=loadBudgetLog();
+function logBudgetChange(delta,note){
+  budgetLog.unshift({delta:delta,note:note,balanceAfter:BUDGET,at:new Date().toISOString()});
+  if(budgetLog.length>100)budgetLog=budgetLog.slice(0,100);
+  saveBudgetLog();
+}
+
+function buildSlots(includePast){
+  var arr=[];
+  var start=includePast?-2:0;
+  for(var i=start;i<12;i++){
+    var d=new Date(TODAY.getFullYear(),TODAY.getMonth()+i,1);
+    arr.push({y:d.getFullYear(),m:d.getMonth()+1,key:ymk(d.getFullYear(),d.getMonth()+1),
+      isPast:i<0,isCurrent:i===0,isFuture:i>0});
+  }
+  return arr;
+}
+function ymk(y,m){return y+'-'+(m<10?'0'+m:''+m);}
+var CUR_KEY=ymk(TODAY.getFullYear(),TODAY.getMonth()+1);
+function billingKey(date){
+  var d=new Date(date);
+  if(d.getDate()<=10){var p=new Date(d.getFullYear(),d.getMonth()-1,1);return ymk(p.getFullYear(),p.getMonth()+1);}
+  return ymk(d.getFullYear(),d.getMonth()+1);
+}
+var CUR_BP=billingKey(TODAY);
+function billingLabel(k){
+  var parts=k.split('-');var y=parseInt(parts[0]);var m=parseInt(parts[1]);
+  var s=new Date(y,m-1,11);var e=new Date(y,m,10);
+  return (s.getDate()+' '+MONTH_TH[s.getMonth()])+' – '+(e.getDate()+' '+MONTH_TH[e.getMonth()]+(e.getFullYear()!==s.getFullYear()?' '+e.getFullYear():''));
+}
+
+// ── LOGOS: inline SVG ──
+var SVG_LOGOS={
+  capcut:'<rect width="36" height="36" rx="8" fill="#0A0A0A"/><polygon points="10,10 26,18 10,26" fill="#00D4AA"/>',
+  'google gemini':'<rect width="36" height="36" rx="8" fill="#4285F4"/><text x="18" y="25" text-anchor="middle" font-size="16" fill="#fff" font-family="Arial,sans-serif">G</text>',
+  gemini:'<rect width="36" height="36" rx="8" fill="#4285F4"/><text x="18" y="25" text-anchor="middle" font-size="16" fill="#fff" font-family="Arial,sans-serif">G</text>',
+  icloud:'<rect width="36" height="36" rx="8" fill="#2563EB"/><text x="18" y="24" text-anchor="middle" font-size="19" fill="#fff">☁</text>',
+  suno:'<rect width="36" height="36" rx="8" fill="#0f0f1a"/><circle cx="18" cy="18" r="7" fill="none" stroke="#A78BFA" stroke-width="2"/><circle cx="18" cy="18" r="3" fill="#A78BFA"/>',
+  claude:'<rect width="36" height="36" rx="8" fill="#D97757"/><text x="18" y="24" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff" font-family="Arial,sans-serif">AI</text>',
+  adobe:'<rect width="36" height="36" rx="8" fill="#FF0000"/><text x="18" y="25" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff" font-family="Arial,sans-serif">Ai</text>',
+  'creative cloud':'<rect width="36" height="36" rx="8" fill="#FF0000"/><text x="18" y="25" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff" font-family="Arial,sans-serif">Ai</text>',
+  figma:'<rect width="36" height="36" rx="8" fill="#1e1e1e"/><circle cx="18" cy="18" r="5" fill="#A259FF"/><rect x="13" y="10" width="5" height="8" rx="2.5" fill="#F24E1E"/><rect x="18" y="10" width="5" height="8" rx="2.5" fill="#FF7262"/>',
+  notion:'<rect width="36" height="36" rx="8" fill="#fff"/><text x="18" y="25" text-anchor="middle" font-size="16" fill="#000" font-family="Georgia,serif">N</text>',
+  github:'<rect width="36" height="36" rx="8" fill="#24292e"/><text x="18" y="25" text-anchor="middle" font-size="11" fill="#fff" font-family="Arial,sans-serif">GH</text>',
+  chatgpt:'<rect width="36" height="36" rx="8" fill="#10a37f"/><text x="18" y="24" text-anchor="middle" font-size="11" fill="#fff" font-family="Arial,sans-serif">GPT</text>',
+  spotify:'<rect width="36" height="36" rx="8" fill="#1DB954"/><circle cx="18" cy="18" r="7" fill="none" stroke="#fff" stroke-width="2"/><path d="M13 16 Q18 14 23 16M13 19 Q18 17 23 19" stroke="#fff" stroke-width="1.5" fill="none"/>',
+  youtube:'<rect width="36" height="36" rx="8" fill="#FF0000"/><polygon points="14,12 26,18 14,24" fill="#fff"/>',
+  discord:'<rect width="36" height="36" rx="8" fill="#5865F2"/><text x="18" y="24" text-anchor="middle" font-size="11" fill="#fff" font-family="Arial,sans-serif">DC</text>',
+  canva:'<rect width="36" height="36" rx="8" fill="#00C4CC"/><text x="18" y="25" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff" font-family="Arial,sans-serif">C</text>',
+  cursor:'<rect width="36" height="36" rx="8" fill="#000"/><text x="18" y="25" text-anchor="middle" font-size="19" fill="#fff">|</text>',
+  vercel:'<rect width="36" height="36" rx="8" fill="#000"/><polygon points="18,10 26,26 10,26" fill="#fff"/>',
+  netflix:'<rect width="36" height="36" rx="8" fill="#E50914"/><text x="18" y="25" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff" font-family="Arial,sans-serif">N</text>'
+};
+var PLAN_URLS={
+  capcut:'https://www.capcut.com/pricing',
+  gemini:'https://one.google.com/about/plans','google gemini':'https://one.google.com/about/plans',
+  icloud:'https://www.apple.com/icloud/',suno:'https://suno.com/pricing',
+  claude:'https://claude.ai/upgrade','creative cloud':'https://www.adobe.com/creativecloud/plans.html',
+  adobe:'https://www.adobe.com/creativecloud/plans.html',figma:'https://www.figma.com/pricing/',
+  notion:'https://www.notion.so/pricing',github:'https://github.com/pricing',
+  chatgpt:'https://openai.com/pricing',canva:'https://www.canva.com/pricing/',
+  cursor:'https://www.cursor.com/pricing',spotify:'https://www.spotify.com/premium/'
+};
+function getLogoSvg(name){
+  var k=(name||'').toLowerCase();
+  for(var key in SVG_LOGOS){if(k.indexOf(key)>=0)return SVG_LOGOS[key];}
+  return null;
+}
+function getPlanUrl(name){
+  var k=(name||'').toLowerCase();
+  for(var key in PLAN_URLS){if(k.indexOf(key)>=0)return PLAN_URLS[key];}
+  return 'https://www.google.com/search?q='+encodeURIComponent((name||'')+' pricing');
+}
+function logoEl(name,big){
+  var cls=big?'mlogo':'logo';
+  var inner=getLogoSvg(name);
+  if(inner)return '<div class="'+cls+'"><svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block">'+inner+'</svg></div>';
+  var letter=((name||'?')[0]||'?').toUpperCase();
+  var colors=['#6366F1','#22C55E','#F97316','#A855F7','#22D3EE','#EF4444','#EAB308'];
+  var ci=(name||'').charCodeAt(0)%colors.length;
+  return '<div class="'+cls+'" style="background:'+colors[ci]+';color:#fff;font-size:'+(big?16:12)+'px;font-weight:700;font-family:Inter,sans-serif">'+letter+'</div>';
+}
+
+// ════════════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════════════
+var DEFAULT_SUBS=[
+  {id:1,name:'CapCut',status:'active',cycle:'monthly',pricetype:'fixed',price:150,rate:1,customPrices:{},payment:'AIS',renewDate:'2025-07-15',cancelDate:'',note:''},
+  {id:2,name:'Google Gemini',status:'active',cycle:'monthly',pricetype:'custom',price:0,rate:1,
+   customPrices:{'2025-06':95,'2025-09':189,'2025-10':189,'2025-11':189,'2025-12':189,'2026-01':189,'2026-02':189,'2026-03':189,'2026-04':189,'2026-05':189},
+   payment:'Credit Card',renewDate:'2025-09-01',cancelDate:'',note:'โปรฯ 95฿/6 เดือน → 189฿/เดือน ก.ย. เป็นต้นไป'},
+  {id:3,name:'iCloud',status:'active',cycle:'monthly',pricetype:'fixed',price:99,rate:1,customPrices:{},payment:'AIS',renewDate:'2025-07-01',cancelDate:'',note:''},
+  {id:4,name:'Suno Pro',status:'active',cycle:'monthly',pricetype:'fixed',price:399,rate:1,customPrices:{},payment:'Credit Card',renewDate:'2025-07-10',cancelDate:'',note:''},
+  {id:5,name:'Claude Pro',status:'active',cycle:'monthly',pricetype:'fixed',price:685,rate:1,customPrices:{},payment:'Credit Card',renewDate:'2025-07-15',cancelDate:'',note:'~$19 USD × 36 ฿'},
+  {id:6,name:'Creative Cloud Pro',status:'pending',cycle:'monthly',pricetype:'custom',price:0,rate:1,
+   customPrices:{'2025-06':777,'2025-07':777,'2025-08':777,'2025-09':1295,'2025-10':1295,'2025-11':1295,'2025-12':1295,'2026-01':1295,'2026-02':1295,'2026-03':1295,'2026-04':1295,'2026-05':1295},
+   payment:'Credit Card',renewDate:'',cancelDate:'',note:'3 เดือนแรก 777฿ → 1,295฿/เดือน'}
+];
+function loadSubs(){try{var s=localStorage.getItem('st_v7');return s?JSON.parse(s):JSON.parse(JSON.stringify(DEFAULT_SUBS));}catch(e){return JSON.parse(JSON.stringify(DEFAULT_SUBS));}}
+function loadHist(){try{var h=localStorage.getItem('sh_v7');return h?JSON.parse(h):{};}catch(e){return {};}}
+function saveSubs(){try{localStorage.setItem('st_v7',JSON.stringify(subs));}catch(e){}sbSave();}
+function saveHist(){try{localStorage.setItem('sh_v7',JSON.stringify(hist));}catch(e){}sbSave();}
+
+var subs=loadSubs();
+var hist=loadHist();
+var viewMode='monthly';
+var editIdx=null;
+var dragId=null;
+
+// ── AUTO-CANCEL ──
+function autoCancel(){
+  var changed=false;
+  for(var i=0;i<subs.length;i++){
+    var s=subs[i];
+    if(s.cancelDate&&s.status!=='cancelled'){
+      var cd=new Date(s.cancelDate);cd.setHours(0,0,0,0);
+      var td=new Date(TODAY);td.setHours(0,0,0,0);
+      if(td>=cd){s.status='cancelled';changed=true;}
+    }
+  }
+  if(changed)saveSubs();
+}
+
+// ── AUTO-SNAPSHOT day 10 ──
+function autoSnapshot(){
+  if(TODAY.getDate()!==10)return;
+  if(hist[CUR_BP])return;
+  var items=[];
+  for(var i=0;i<subs.length;i++){
+    var s=subs[i];
+    if(s.status==='active'){
+      var p=getMonthPrice(s,CUR_KEY);
+      if(p>0)items.push({name:s.name,price:p});
+    }
+  }
+  var total=items.reduce(function(a,it){return a+it.price;},0);
+  hist[CUR_BP]={total:total,items:items,paid:false,savedAt:new Date().toISOString()};
+  saveHist();
+}
+
+// ── PRICE HELPERS (all in THB) ──
+function getMonthPrice(sub,slotKey){
+  if(sub.pricetype==='custom'){
+    var v=sub.customPrices&&sub.customPrices[slotKey];
+    return v?parseFloat(v):0;
+  }
+  // fixed
+  var base=sub.price||0;
+  var rate=sub.rate>0?sub.rate:1;
+  return base*rate;
+}
+function slotCost(sub,slotKey){
+  if(sub.status!=='active')return 0;
+  return getMonthPrice(sub,slotKey);
+}
+function displayPrice(sub,showYearly){
+  if(sub.pricetype==='custom'){
+    var v=sub.customPrices&&sub.customPrices[CUR_KEY];
+    var p=v?parseFloat(v):0;
+    if(showYearly){var slots=buildSlots(false);var tot=0;for(var i=0;i<slots.length;i++){var vv=sub.customPrices&&sub.customPrices[slots[i].key];if(vv)tot+=parseFloat(vv);}return tot;}
+    return p;
+  }
+  var base=sub.price||0;
+  return showYearly?base*12:base;
+}
+function cycleLbl(sub){return sub.cycle==='yearly'?'Yearly':'Monthly';}
+function isCustomPriceMissing(sub){
+  // true when pricetype=custom and no price entered for the CURRENT month
+  // — signals the user's recorded range has been exceeded, needs re-entry
+  if(sub.pricetype!=='custom')return false;
+  var v=sub.customPrices&&sub.customPrices[CUR_KEY];
+  return !v||parseFloat(v)<=0;
+}
+function fmt(n){
+  if(n===null||n===undefined||n==='')return '-';
+  return '฿'+Math.round(n).toLocaleString('th-TH');
+}
+function fmtDate(d){return d.getDate()+' '+MONTH_TH[d.getMonth()]+' '+d.getFullYear();}
+function fmtMonthYear(d){return MONTH_TH[d.getMonth()]+' '+d.getFullYear();}
+
+// ── RENEW (auto-advance) ──
+function nextRenewDate(sub){
+  if(!sub.renewDate)return null;
+  var base=new Date(sub.renewDate);
+  if(isNaN(base.getTime()))return null;
+  var today=new Date(TODAY);today.setHours(0,0,0,0);
+  var d=new Date(base);
+  var iter=60;
+  while(d<today&&iter-->0){
+    if(sub.cycle==='yearly')d.setFullYear(d.getFullYear()+1);
+    else d.setMonth(d.getMonth()+1);
+  }
+  return d;
+}
+function yearlyCancelBy(sub){
+  if(sub.cycle!=='yearly'||!sub.renewDate)return null;
+  var base=new Date(sub.renewDate);
+  if(isNaN(base.getTime()))return null;
+  var today=new Date(TODAY);today.setHours(0,0,0,0);
+  var d=new Date(base);
+  var iter=20;
+  while(d<today&&iter-->0)d.setFullYear(d.getFullYear()+1);
+  // cancel deadline = day before next renewal
+  var cancel=new Date(d);cancel.setDate(cancel.getDate()-1);
+  return cancel;
+}
+function renewInfo(sub){
+  if(!sub.renewDate)return {cls:'none',lbl:'—',countdown:''};
+  var next=nextRenewDate(sub);
+  if(!next)return {cls:'none',lbl:'—',countdown:''};
+  var today=new Date(TODAY);today.setHours(0,0,0,0);
+  var days=Math.round((next-today)/86400000);
+  var sameYear=next.getFullYear()===TODAY.getFullYear();
+  var dateStr=next.getDate()+' '+MONTH_TH[next.getMonth()]+(sameYear?'':' '+next.getFullYear());
+  var cls,countdown;
+  if(days<=0){cls='urgent';countdown='วันนี้';}
+  else if(days<=7){cls='urgent';countdown=days+'d';}
+  else if(days<=30){cls='warn';countdown=days+'d';}
+  else{cls='ok';countdown=days+'d';}
+  return {cls:cls,lbl:dateStr,countdown:countdown};
+}
+
+// ════════════════════════════════════════════════
+// RENDER
+// ════════════════════════════════════════════════
+var sortCol=''; // 'price' | 'renew'
+var sortDir=1;  // 1=asc, -1=desc
+
+function toggleSort(col){
+  if(sortCol===col){sortDir*=-1;}else{sortCol=col;sortDir=1;}
+  render();
+}
+
+function sortedList(list){
+  if(!sortCol)return list;
+  var copy=list.slice();
+  copy.sort(function(a,b){
+    if(sortCol==='price'){
+      var pa=displayPrice(a,false)||0;
+      var pb=displayPrice(b,false)||0;
+      return (pa-pb)*sortDir;
+    }
+    if(sortCol==='renew'){
+      var ra=nextRenewDate(a);var rb=nextRenewDate(b);
+      var ta=ra?ra.getTime():9999999999999;
+      var tb=rb?rb.getTime():9999999999999;
+      return (ta-tb)*sortDir;
+    }
+    return 0;
+  });
+  return copy;
+}
+
+function sortArrow(col){
+  if(sortCol!==col)return '<span style="opacity:.25">⇅</span>';
+  return sortDir===1?'↑':'↓';
+}
+
+function render(){
+  autoCancel();
+  var chartSlots=buildSlots(false);
+  var slots=buildSlots(false);
+  var active=subs.filter(function(s){return s.status==='active';});
+  var pending=subs.filter(function(s){return s.status==='pending';});
+  var cancelled=subs.filter(function(s){return s.status==='cancelled';});
+
+  var chartCosts=chartSlots.map(function(sl){
+    return active.reduce(function(sum,s){return sum+slotCost(s,sl.key);},0);
+  });
+  var costs=slots.map(function(sl){
+    return active.reduce(function(sum,s){return sum+slotCost(s,sl.key);},0);
+  });
+  var curCost=costs[0]||0;
+  var annCost=costs.reduce(function(a,b){return a+b;},0);
+
+  // paid history spent
+  var spentTotal=0;
+  var histKeys=Object.keys(hist);
+  for(var hi=0;hi<histKeys.length;hi++){if(hist[histKeys[hi]].paid)spentTotal+=hist[histKeys[hi]].total||0;}
+
+    // frozen bar — BUDGET is a lump-sum pool, not tied to any time period
+  safeGet('s-total').textContent=viewMode==='yearly'?fmt(annCost):fmt(curCost);
+  var lblEl=safeGet('sb-lbl-total');if(lblEl)lblEl.textContent=viewMode==='yearly'?'12 เดือน':'เดือนนี้';
+  safeGet('s-active').textContent=active.length;
+  safeGet('s-spent').textContent=fmt(spentTotal);
+  // Budget label shows remaining balance — NOT the original pool size
+  var spentPlusCurrent=spentTotal+curCost;
+  var remain=BUDGET-spentPlusCurrent;
+  var usePct=BUDGET>0?(spentPlusCurrent/BUDGET)*100:0;
+  var blbl=safeGet('s-budget-lbl');
+  if(blbl){
+    var rv=Math.abs(remain)>=10000?'฿'+(remain/1000).toFixed(1)+'k':fmt(remain);
+    blbl.textContent=rv;
+    blbl.style.color=remain<0?'var(--red)':'var(--t2)';
+  }
+  var remEl=safeGet('s-remain');
+  if(remEl){
+    remEl.textContent='จาก ฿'+BUDGET.toLocaleString('th-TH');
+    remEl.style.color=usePct>=100?'var(--red)':usePct>=80?'var(--amber)':'var(--t3)';
+  }
+  var paidPct=Math.min(BUDGET>0?(spentTotal/BUDGET)*100:0,100);
+  var curPct=Math.min(BUDGET>0?(curCost/BUDGET)*100:0,100);
+  var barColorPaid=usePct>=100?'#FB7185':usePct>=80?'#FCD34D':'#2DD4BF';
+  var barColorCur=usePct>=100?'#FB7185':usePct>=80?'#FB923C':'#C084FC';
+  var bfp=safeGet('bfp');if(bfp){bfp.style.width=paidPct+'%';bfp.style.background=barColorPaid;}
+  var bfc=safeGet('bfc');if(bfc){bfc.style.left=paidPct+'%';bfc.style.width=Math.max(0,Math.min(curPct,100-paidPct))+'%';bfc.style.background=barColorCur;}
+
+  safeGet('cnt-a').textContent=active.length;
+  safeGet('cnt-p').textContent=pending.length;
+  safeGet('cnt-c').textContent=cancelled.length;
+  safeGet('cnt-h').textContent=histKeys.length;
+
+  var titleEl=safeGet('chart-title-text');
+  if(titleEl)titleEl.textContent=statsViewOn?'สถิติรายแอพ':'Forecast 12 เดือนข้างหน้า';
+  if(statsViewOn){renderStatsStack(active);}else{renderChart(chartSlots,chartCosts);}
+  updateSortArrows();
+  renderSection('active',active,slots);
+  renderSection('pending',pending,slots);
+  renderSection('cancelled',cancelled,slots);
+  renderHist();
+}
+
+function renderChart(slots,costs){
+  var maxC=Math.max.apply(null,costs.concat([1]));
+  var html='';
+  for(var i=0;i<slots.length;i++){
+    var sl=slots[i];var cost=costs[i];
+    var h=Math.max(3,Math.round((cost/maxC)*50));
+    var col,op,lblCls='';
+    if(sl.isPast){col='#454268';op=0.8;lblCls=' past';}
+    else if(sl.isCurrent){col='#C084FC';op=1;lblCls=' cur';}
+    else{col='#2DD4BF';op=0.4;}
+    var isPaid=isSlotPaid(sl.key);
+    html+='<div class="mcol">';
+    html+='<div class="mlbl'+lblCls+'">'+MONTH_TH[sl.m-1].replace('.','')+'</div>';
+    var barStyle='height:'+h+'px;background:'+col+';opacity:'+op;
+    if(isPaid)barStyle+=';box-shadow:0 -3px 0 0 #2DD4BF,0 0 12px rgba(45,212,191,.5)';
+    html+='<div class="bwrap"><div class="mbar" style="'+barStyle+'" title="'+MONTH_TH[sl.m-1]+' '+sl.y+': '+fmt(cost)+(isPaid?' ✓':'')+'"></div></div>';
+    html+='<div class="mamt">'+(cost>0?fmt(cost):'-')+'</div>';
+    html+='</div>';
+  }
+  safeGet('mgrid').innerHTML=html;
+}
+
+var statsViewOn=false;
+
+function flipChartView(){
+  statsViewOn=!statsViewOn;
+  var mgrid=safeGet('mgrid');
+  var stack=safeGet('stats-stack');
+  var btn=safeGet('stats-flip-btn');
+  if(mgrid)mgrid.style.display=statsViewOn?'none':'grid';
+  if(stack)stack.style.display=statsViewOn?'block':'none';
+  if(btn)btn.textContent=statsViewOn?'กราฟ':'สถิติ';
+  if(btn)btn.title=statsViewOn?'ดูกราฟ Forecast':'ดูสถิติรายแอพ';
+  render();
+}
+
+function appLifetimeSpend(subName){
+  // Sum across ALL paid history periods where this app appears
+  var total=0;var count=0;
+  var keys=Object.keys(hist);
+  for(var i=0;i<keys.length;i++){
+    var h=hist[keys[i]];
+    if(!h.paid||!h.items)continue;
+    for(var j=0;j<h.items.length;j++){
+      if(h.items[j].name===subName){total+=h.items[j].price||0;count++;}
+    }
+  }
+  return {total:total,count:count};
+}
+
+function renderStatsStack(activeList){
+  var el=safeGet('stats-stack');if(!el)return;
+  if(!activeList.length){
+    el.innerHTML='<div style="text-align:center;color:var(--t3);font-size:13px;padding:30px 10px">ยังไม่มีแอพ Active</div>';
+    return;
+  }
+  // sort by lifetime spend descending — most expensive app first
+  var withLife=activeList.map(function(s){
+    var life=appLifetimeSpend(s.name);
+    return {sub:s,life:life,monthlyNow:getMonthPrice(s,CUR_KEY)};
+  });
+  withLife.sort(function(a,b){return b.life.total-a.life.total;});
+
+  var grandTotal=withLife.reduce(function(sum,x){return sum+x.life.total;},0);
+
+  var html='<div class="stat-all-card">';
+  html+='<div class="stat-all-hdr">';
+  html+='<span>ยอดใช้จ่ายสะสมรายแอพ</span>';
+  html+='<span class="stat-all-total">'+fmt(grandTotal)+'</span>';
+  html+='</div>';
+  html+='<div class="stat-all-list">';
+  for(var i=0;i<withLife.length;i++){
+    var x=withLife[i];var s=x.sub;
+    var pct=grandTotal>0?(x.life.total/grandTotal)*100:0;
+    var planUrl=getPlanUrl(s.name);
+    html+='<a href="'+planUrl+'" target="_blank" class="stat-row">';
+    html+=logoEl(s.name,false);
+    html+='<div class="stat-row-info">';
+    html+='<div class="stat-row-top"><span class="stat-row-name">'+escH(s.name)+'</span><span class="stat-row-val">'+fmt(x.life.total)+'</span></div>';
+    html+='<div class="stat-row-bar-track"><div class="stat-row-bar-fill" style="width:'+pct+'%"></div></div>';
+    html+='<div class="stat-row-sub">'+x.life.count+' รอบที่ชำระ · เดือนนี้ '+fmt(x.monthlyNow)+'</div>';
+    html+='</div></a>';
+  }
+  html+='</div></div>';
+  el.innerHTML=html;
+}
+
+function isSlotPaid(slotKey){
+  // Billing period 11/M → 10/(M+1) is keyed as month M (the start month)
+  // Chart slot '2025-06' = June spending → snapshot key is '2025-06' (snapped on July 10)
+  // Also check the next month key in case snapshot was taken while still in the period
+  var parts=slotKey.split('-');
+  var y=parseInt(parts[0]);var m=parseInt(parts[1]);
+  var nextM=m+1;var nextY=y;if(nextM>12){nextM=1;nextY++;}
+  var nextKey=ymk(nextY,nextM);
+  // Direct match: hist keyed exactly as slotKey (period started in slotKey month)
+  if(hist[slotKey]&&hist[slotKey].paid) return true;
+  // Or snapshot was taken on day 10 of next month → billingKey gives slotKey
+  if(hist[nextKey]&&hist[nextKey].paid) return false; // nextKey paid doesn't affect slotKey
+  return false;
+}
+
+function updateSortArrows(){
+  var ap=safeGet('sort-arr-price');if(ap)ap.innerHTML=sortArrow('price');
+  var ar=safeGet('sort-arr-renew');if(ar)ar.innerHTML=sortArrow('renew');
+}
+function renderSection(sec,list,slots){
+  if(sec==='active'||sec==='pending')list=sortedList(list);
+  renderDesktopTable(sec,list);
+  renderMobileCards(sec,list);
+}
+
+function renderDesktopTable(sec,list){
+  var tbody=safeGet('dtb-'+sec);if(!tbody)return;
+  if(!list.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--t3);padding:20px;font-size:13px">—</td></tr>';return;}
+  var html='';
+  for(var i=0;i<list.length;i++){
+    var s=list[i];var gi=subs.indexOf(s);
+    var ri=renewInfo(s);
+    var p=displayPrice(s,viewMode==='yearly');
+    var showPerYear=viewMode==='yearly';
+    var missingPrice=sec==='active'&&isCustomPriceMissing(s);
+    var ph=p>0?fmt(p)+'<span class="pp">'+(showPerYear?'/ปี':'/เดือน')+'</span>':(missingPrice?'<span class="tbd-warn" title="ยังไม่ได้กรอกราคาเดือนนี้ — แตะเพื่อแก้ไข">⚠ TBD</span>':'<span style="color:var(--t3)">TBD</span>');
+    var ycb=yearlyCancelBy(s);
+    var ycbTxt=ycb&&sec!=='cancelled'?'<div style="font-size:9px;color:var(--t3);opacity:.6;margin-top:1px">until '+fmtDate(ycb)+'</div>':'';
+    var countdownPill=ri.countdown?'<span class="renew-pill '+ri.cls+'">'+ri.countdown+'</span>':'';
+    var rc=sec==='cancelled'?'<span style="color:var(--t3);font-size:11px">'+(s.cancelDate?fmtDate(new Date(s.cancelDate)):'—')+'</span>':'<div class="renew-date-wrap"><span class="renew-date-txt">'+ri.lbl+'</span>'+countdownPill+'</div>'+ycbTxt;
+    html+='<tr class="'+(sec==='cancelled'?'canc-row':'')+' clickrow" draggable="true" data-id="'+s.id+'" data-gi="'+gi+'" data-sec="'+sec+'" ondragstart="onRowDragStart(event,'+s.id+')" ondragend="onRowDragEnd(event)" ondragover="onRowDragOver(event,'+s.id+')" ondrop="onRowDrop(event,'+s.id+')" onclick="handleRowClick(event,'+gi+')">';
+    html+='<td><span class="dh">⠿</span></td>';
+    var planUrl=getPlanUrl(s.name);
+    html+='<td><div class="logo-cell">'+logoEl(s.name,false)+'<div><div class="app-nm">'+escH(s.name)+'<a href="'+planUrl+'" target="_blank" onclick="event.stopPropagation()" style="font-size:9px;color:var(--t3);margin-left:5px;text-decoration:none;opacity:.5">↗</a></div>'+(s.note?'<div class="app-nt">'+escH(s.note)+'</div>':'')+'</div></div></td>';
+    html+='<td class="price-td">'+ph+'</td>';
+    html+='<td>'+rc+'</td>';
+    html+='<td style="color:var(--t3);font-size:12px">'+cycleLbl(s)+(s.pricetype==='custom'?' ·C':'')+'</td>';
+    html+='<td><span class="pay-tag">'+escH(s.payment)+'</span></td>';
+    html+='<td><div class="act-td">';
+    if(sec==='active'){
+      html+='<button class="btn-icon" data-gi="'+gi+'" onclick="moveToSec(+this.dataset.gi,\'pending\')" title="Pending">⏳</button>';
+      html+='<button class="btn-icon i-cancel" data-gi="'+gi+'" onclick="cancelItem(+this.dataset.gi)" title="ยกเลิก subscription">🚫</button>';
+    }else if(sec==='pending'){
+      html+='<button class="btn-icon i-restore" data-gi="'+gi+'" onclick="moveToSec(+this.dataset.gi,\'active\')" title="Active">✅</button>';
+      html+='<button class="btn-icon i-cancel" data-gi="'+gi+'" onclick="cancelItem(+this.dataset.gi)" title="ยกเลิก subscription">🚫</button>';
+    }else{
+      html+='<button class="btn-icon i-restore" data-gi="'+gi+'" onclick="moveToSec(+this.dataset.gi,\'active\')" title="ย้ายกลับ Active">↩</button>';
+    }
+    html+='<button class="btn-icon i-del" data-gi="'+gi+'" onclick="delItem(+this.dataset.gi)" title="ลบ">🗑</button>';
+    html+='</div></td></tr>';
+  }
+  tbody.innerHTML=html;
+}
+
+function renderMobileCards(sec,list){
+  var el=safeGet('mc-'+sec);if(!el)return;
+  if(!list.length){el.innerHTML='<div style="text-align:center;color:var(--t3);font-size:13px;padding:20px">—</div>';return;}
+  var html='';
+  for(var i=0;i<list.length;i++){
+    var s=list[i];var gi=subs.indexOf(s);
+    var ri=renewInfo(s);
+    var p=displayPrice(s,viewMode==='yearly');
+    var showPerYearM=viewMode==='yearly';
+    var missingPriceM=sec==='active'&&isCustomPriceMissing(s);
+    var ph=p>0?fmt(p)+'<span class="pp">'+(showPerYearM?'/ปี':'/เดือน')+'</span>':(missingPriceM?'<span class="tbd-warn">⚠ TBD</span>':'TBD');
+    var canUp=i>0;var canDown=i<list.length-1;
+    html+='<div class="mcard '+(sec==='active'?'act':sec==='pending'?'pend':'canc')+'" data-gi="'+gi+'" onclick="handleCardClick(event,'+gi+')">';
+    html+='<div class="mcard-top">'+logoEl(s.name,true);
+    var mPlanUrl=getPlanUrl(s.name);
+    html+='<div class="mcard-info"><div class="mcard-name">'+escH(s.name)+'<a href="'+mPlanUrl+'" target="_blank" onclick="event.stopPropagation()" style="font-size:10px;color:var(--t3);margin-left:6px;text-decoration:none;opacity:.45">↗</a></div>';
+    html+='<div class="mcard-sub">'+cycleLbl(s)+' · '+escH(s.payment)+'</div>';
+    if(s.note)html+='<div class="mcard-note">'+escH(s.note)+'</div>';
+    html+='</div><div class="mcard-price">'+ph+'</div></div>';
+    html+='<div class="mcard-bottom"><div class="mcard-meta">';
+    if(sec!=='cancelled'&&ri.lbl&&ri.lbl!=='—'){html+='<span class="renew-date-txt" style="font-size:12px;color:var(--t2)">'+ri.lbl+'</span>';if(ri.countdown)html+='<span class="renew-pill '+ri.cls+'">'+ri.countdown+'</span>';}
+    if(missingPriceM)html+='<span class="renew-inline warn">⚠ ยังไม่กรอกราคาเดือนนี้</span>';
+    if(sec==='cancelled'&&s.cancelDate){var cd=new Date(s.cancelDate);html+='<span style="font-size:11px;color:var(--t3)">ยกเลิก '+fmtDate(cd)+'</span>';}
+    html+='</div><div class="mcard-acts">';
+    html+='<div class="reorder-btns">';
+    html+='<button class="reorder-btn" data-sec="'+sec+'" data-gi="'+gi+'" data-dir="-1" '+(canUp?'onclick="moveCard(this.dataset.sec,+this.dataset.gi,-1)"':'disabled style="opacity:.2"')+'>▲</button>';
+    html+='<button class="reorder-btn" data-sec="'+sec+'" data-gi="'+gi+'" data-dir="1" '+(canDown?'onclick="moveCard(this.dataset.sec,+this.dataset.gi,1)"':'disabled style="opacity:.2"')+'>▼</button>';
+    html+='</div>';
+    if(sec==='active'){
+      html+='<button class="btn-icon" data-gi="'+gi+'" onclick="moveToSec(+this.dataset.gi,\'pending\')">⏳</button>';
+      html+='<button class="btn-icon i-cancel" data-gi="'+gi+'" onclick="cancelItem(+this.dataset.gi)">🚫</button>';
+    }else if(sec==='pending'){
+      html+='<button class="btn-icon i-restore" data-gi="'+gi+'" onclick="moveToSec(+this.dataset.gi,\'active\')">✅</button>';
+      html+='<button class="btn-icon i-cancel" data-gi="'+gi+'" onclick="cancelItem(+this.dataset.gi)">🚫</button>';
+    }else{
+      html+='<button class="btn-icon i-restore" data-gi="'+gi+'" onclick="moveToSec(+this.dataset.gi,\'active\')">↩</button>';
+    }
+    html+='<button class="btn-icon i-del" data-gi="'+gi+'" onclick="delItem(+this.dataset.gi)">🗑</button>';
+    html+='</div></div></div>';
+  }
+  el.innerHTML=html;
+}
+
+function renderHist(){
+  var el=safeGet('hist-box');if(!el)return;
+  var keys=Object.keys(hist).sort().reverse();
+  if(!keys.length){
+    el.innerHTML='<div class="hist-empty"><div style="font-size:24px;margin-bottom:8px">📭</div><div>ยังไม่มีประวัติ</div><div style="font-size:11px;margin-top:4px">บันทึกอัตโนมัติทุกวันที่ 10</div></div>';
+    return;
+  }
+  var html='';
+  for(var i=0;i<keys.length;i++){
+    var k=keys[i];var h=hist[k];var isPaid=h.paid||false;var items=h.items||[];
+    html+='<div class="hist-row"><div class="hist-top"><div>';
+    var appCount=items.length;
+    html+='<div class="hist-range">'+billingLabel(k)+'<span class="hist-app-count">'+appCount+' แอพ</span></div>';
+    html+='<div class="hist-date">บันทึก '+(h.savedAt?fmtDate(new Date(h.savedAt)):'-')+'</div>';
+    html+='</div><div class="hist-right">';
+    html+='<span class="hist-total">'+fmt(h.total||0)+'</span>';
+    html+='<button class="paid-tog '+(isPaid?'pd':'np')+'" onclick="togPaid(\''+k+'\')">'+(isPaid?'✅ ชำระแล้ว':'○ ยังไม่ชำระ')+'</button>';
+    html+='</div></div>';
+    html+='<div class="hist-items">';
+    for(var j=0;j<items.length;j++)html+='<div class="hist-it"><div class="hist-it-nm">'+escH(items[j].name)+'</div><div class="hist-it-pr">'+fmt(items[j].price)+'</div></div>';
+    html+='</div></div>';
+  }
+  el.innerHTML=html;
+}
+
+function escH(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ════════════════════════════════════════════════
+// ACTIONS
+// ════════════════════════════════════════════════
+function isInsideBtn(el){
+  var node=el;
+  for(var i=0;i<8;i++){
+    if(!node||!node.tagName)break;
+    if(node.tagName==='BUTTON'||node.tagName==='A')return true;
+    var cn=typeof node.className==='string'?node.className:'';
+    if(cn.indexOf('dh')>=0||cn.indexOf('reorder')>=0)return true;
+    node=node.parentElement;
+  }
+  return false;
+}
+function handleRowClick(e,gi){if(isInsideBtn(e.target))return;editItem(gi);}
+function handleCardClick(e,gi){if(isInsideBtn(e.target))return;editItem(gi);}
+function moveCard(sec,gi,dir){
+  var secList=subs.filter(function(s){return s.status===sec;});
+  var idx=secList.indexOf(subs[gi]);var newIdx=idx+dir;
+  if(newIdx<0||newIdx>=secList.length)return;
+  var swap=secList[newIdx];var swapGi=subs.indexOf(swap);
+  var tmp=subs[gi];subs[gi]=subs[swapGi];subs[swapGi]=tmp;
+  saveSubs();render();
+}
+function cancelItem(gi){
+  if(!confirm('ยกเลิก subscription "'+subs[gi].name+'"?'))return;
+  moveToSec(gi,'cancelled');
+}
+function restoreItem(gi){
+  subs[gi].status='active';
+  subs[gi].cancelDate='';
+  saveSubs();render();
+}
+function delItem(gi){
+  if(!confirm('ลบ "'+subs[gi].name+'" ถาวร?'))return;
+  subs.splice(gi,1);saveSubs();render();
+}
+function openPlan(encodedName){
+  try{window.open(getPlanUrl(decodeURIComponent(encodedName)),'_blank');}catch(e){}
+}
+function togPaid(k){
+  if(hist[k]){hist[k].paid=!hist[k].paid;saveHist();render();}
+}
+function forceSnap(){
+  var slots=buildSlots();
+  var items=[];
+  for(var i=0;i<subs.length;i++){
+    var s=subs[i];if(s.status==='active'){var p=getMonthPrice(s,CUR_KEY);if(p>0)items.push({name:s.name,price:p});}
+  }
+  var total=items.reduce(function(a,it){return a+it.price;},0);
+  hist[CUR_BP]={total:total,items:items,paid:false,savedAt:new Date().toISOString()};
+  saveHist();render();
+}
+function flipView(){
+  viewMode=viewMode==='monthly'?'yearly':'monthly';
+  updateToggleUI();render();
+}
+function updateToggleUI(){
+  var mEl=safeGet('vt-monthly');var yEl=safeGet('vt-yearly');var sl=safeGet('vt-slider');
+  if(!mEl||!yEl||!sl)return;
+  var isM=viewMode==='monthly';
+  mEl.classList.toggle('on',isM);yEl.classList.toggle('on',!isM);
+  // Use requestAnimationFrame to ensure layout is ready
+  requestAnimationFrame(function(){
+    var activeEl=isM?mEl:yEl;
+    sl.style.left=activeEl.offsetLeft+'px';
+    sl.style.width=activeEl.offsetWidth+'px';
+  });
+}
+var budgetTabMode='add'; // 'add' | 'set'
+function switchBudgetTab(tab){
+  budgetTabMode=tab;
+  safeGet('btab-add').classList.toggle('on',tab==='add');
+  safeGet('btab-set').classList.toggle('on',tab==='set');
+  safeGet('btab-add-panel').style.display=tab==='add'?'block':'none';
+  safeGet('btab-set-panel').style.display=tab==='set'?'block':'none';
+  var inp=safeGet(tab==='add'?'bsheet-add-input':'bsheet-set-input');
+  if(inp){inp.value='';setTimeout(function(){inp.focus();},80);}
+  updateBudgetPreview();
+}
+function updateBudgetPreview(){
+  if(budgetTabMode==='add'){
+    var n=parseFloat(safeVal('bsheet-add-input'));
+    var prev=safeGet('bsheet-preview');
+    if(prev)prev.textContent=isNaN(n)||n===0?'—':fmt(BUDGET+n);
+  }
+}
+function openBudgetSheet(){
+  safeGet('bsheet-current-val').textContent=fmt(BUDGET);
+  safeGet('bsheet-old-val').textContent=Math.round(BUDGET).toLocaleString('th-TH');
+  safeGet('bsheet-log-list').style.display='none';
+  safeGet('bsheet-log-toggle').textContent='🧾 ประวัติ';
+  switchBudgetTab('add');
+  safeGet('budget-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeBudgetSheet(){
+  safeGet('budget-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function onBudgetOvClick(e){if(e.target===safeGet('budget-modal'))closeBudgetSheet();}
+function saveBudgetSheet(){
+  var oldB=BUDGET;
+  if(budgetTabMode==='add'){
+    var n=parseFloat(safeVal('bsheet-add-input'));
+    if(isNaN(n)||n===0){alert('กรุณาใส่จำนวนที่จะเติม');return;}
+    BUDGET+=n;
+    if(BUDGET<0)BUDGET=0;
+    logBudgetChange(n,'เติมงบ');
+  }else{
+    var v=parseFloat(safeVal('bsheet-set-input'));
+    if(isNaN(v)||v<0){alert('กรุณาใส่ยอดรวมที่ถูกต้อง');return;}
+    if(v===oldB){closeBudgetSheet();return;}
+    BUDGET=v;
+    logBudgetChange(v-oldB,'ตั้งยอดใหม่ (จาก '+fmt(oldB)+')');
+  }
+  try{localStorage.setItem('budget_v7',String(BUDGET));}catch(e){}
+  render();
+  closeBudgetSheet();
+}
+// ════════════════════════════
+// SUMMARY SHEET
+// ════════════════════════════
+var sumPickerYear={start:TODAY.getFullYear(),end:TODAY.getFullYear()};
+var sumRange={start:null,end:null}; // 'YYYY-MM'
+
+function openSummarySheet(){
+  // build year options
+  var yearsSeen={};
+  yearsSeen[TODAY.getFullYear()]=true;
+  yearsSeen[TODAY.getFullYear()+1]=true;
+  var histKeys=Object.keys(hist);
+  for(var i=0;i<histKeys.length;i++){
+    var y=parseInt(histKeys[i].split('-')[0]);
+    if(y>2000)yearsSeen[y]=true;
+  }
+  sumPickerYear.start=TODAY.getFullYear();
+  sumPickerYear.end=TODAY.getFullYear();
+  sumRange.start=null;sumRange.end=null;
+  renderPickerMonths('start');
+  renderPickerMonths('end');
+  renderRangeSummary();
+  safeGet('sum-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeSummarySheet(){
+  safeGet('sum-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ── Range picker ──
+var MONTH_EN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function renderPickerMonths(side){
+  var yr=sumPickerYear[side];
+  var el=safeGet('sum-'+side+'-months');
+  var yrEl=safeGet('sum-'+side+'-yr');
+  if(!el||!yrEl)return;
+  yrEl.textContent=yr;
+  var html='';
+  for(var m=1;m<=12;m++){
+    var k=ymk(yr,m);
+    var isTod=k===CUR_KEY;
+    var isSel=(side==='start'&&sumRange.start===k)||(side==='end'&&sumRange.end===k);
+    html+='<button class="sum-pmo'+(isTod?' today':'')+(isSel?' sel':'')+'" data-side="'+side+'" data-key="'+k+'" onclick="selectRangeMonth(this.dataset.side,this.dataset.key)">'+MONTH_EN[m-1]+'</button>';
+  }
+  el.innerHTML=html;
+}
+
+function shiftPickerYear(side,delta){
+  sumPickerYear[side]+=delta;
+  renderPickerMonths(side);
+}
+
+function selectRangeMonth(side,k){
+  sumRange[side]=k;
+  renderPickerMonths(side);
+  // auto-set other side if not set or invalid order
+  if(side==='start'&&sumRange.end&&sumRange.end<sumRange.start){
+    sumRange.end=sumRange.start;
+    renderPickerMonths('end');
+  }
+  if(side==='end'&&sumRange.start&&sumRange.start>sumRange.end){
+    sumRange.start=sumRange.end;
+    renderPickerMonths('start');
+  }
+  renderRangeSummary();
+}
+
+function renderRangeSummary(){
+  var el=safeGet('sum-range-result');if(!el)return;
+  if(!sumRange.start||!sumRange.end){
+    el.innerHTML='<div style="color:var(--t3);font-size:12px;text-align:center;padding:10px">เลือกช่วงเวลาที่ต้องการ</div>';
+    return;
+  }
+  // collect all months in range
+  var keys=[];
+  var cur=sumRange.start;var limit=0;
+  while(cur<=sumRange.end&&limit++<60){
+    keys.push(cur);
+    var parts=cur.split('-');var y=parseInt(parts[0]);var m=parseInt(parts[1]);
+    m++;if(m>12){m=1;y++;}
+    cur=ymk(y,m);
+  }
+  var active=subs.filter(function(s){return s.status==='active';});
+  // Track paid and forecast separately
+  var appPaid={};var appForecast={};
+  for(var ki=0;ki<keys.length;ki++){
+    var k=keys[ki];
+    if(hist[k]&&hist[k].paid&&hist[k].items){
+      for(var j=0;j<hist[k].items.length;j++){
+        var nm=hist[k].items[j].name;
+        appPaid[nm]=(appPaid[nm]||0)+(hist[k].items[j].price||0);
+      }
+    }else{
+      for(var ai=0;ai<active.length;ai++){
+        var cost=slotCost(active[ai],k);
+        if(cost>0)appForecast[active[ai].name]=(appForecast[active[ai].name]||0)+cost;
+      }
+    }
+  }
+  // Merge app names
+  var allApps={};
+  Object.keys(appPaid).forEach(function(n){allApps[n]=true;});
+  Object.keys(appForecast).forEach(function(n){allApps[n]=true;});
+  var apps=Object.keys(allApps).sort(function(a,b){
+    return ((appPaid[b]||0)+(appForecast[b]||0))-((appPaid[a]||0)+(appForecast[a]||0));
+  });
+  var totalPaid=Object.keys(appPaid).reduce(function(s,a){return s+appPaid[a];},0);
+  var totalForecast=Object.keys(appForecast).reduce(function(s,a){return s+appForecast[a];},0);
+  var totalAll=totalPaid+totalForecast;
+  // Range label
+  var sp=sumRange.start.split('-');var ep=sumRange.end.split('-');
+  var rangeLbl=MONTH_EN[parseInt(sp[1])-1]+' '+sp[0]+(sumRange.start!==sumRange.end?' → '+MONTH_EN[parseInt(ep[1])-1]+' '+ep[0]:'');
+  var html='<div class="sum-range-count">'+rangeLbl+' · '+keys.length+' เดือน</div>';
+  // Range label
+  var sp=sumRange.start.split('-');var ep=sumRange.end.split('-');
+  var rangeLbl=MONTH_EN[parseInt(sp[1])-1]+' '+sp[0]+(sumRange.start!==sumRange.end?' → '+MONTH_EN[parseInt(ep[1])-1]+' '+ep[0]:'');
+  var html='<div class="sum-range-count">'+rangeLbl+' · '+keys.length+' เดือน</div>';
+  html+='<div class="sum-breakdown">';
+  if(totalPaid>0)html+='<div class="sum-bd-row"><span>ชำระแล้ว</span><span class="sum-bd-val paid">'+fmt(totalPaid)+'</span></div>';
+  if(totalForecast>0)html+='<div class="sum-bd-row"><span>คาดการณ์</span><span class="sum-bd-val fc">'+fmt(totalForecast)+'</span></div>';
+  html+='<div class="sum-bd-row total"><span>รวมทั้งหมด</span><span class="sum-total-val">'+fmt(totalAll)+'</span></div>';
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+function toggleBudgetLog(){
+  var list=safeGet('bsheet-log-list');
+  var btn=safeGet('bsheet-log-toggle');
+  if(!list||!btn)return;
+  var showing=list.style.display==='block';
+  if(showing){
+    list.style.display='none';
+    btn.textContent='🧾 ประวัติการเติม/หักงบ';
+    return;
+  }
+  if(!budgetLog.length){
+    list.innerHTML='<div class="budget-log-empty">ยังไม่มีประวัติ</div>';
+  }else{
+    var html='';
+    for(var i=0;i<budgetLog.length;i++){
+      var entry=budgetLog[i];
+      var isPos=entry.delta>=0;
+      var d=new Date(entry.at);
+      html+='<div class="budget-log-row">';
+      html+='<div class="budget-log-info"><div class="budget-log-note">'+escH(entry.note||'')+'</div><div class="budget-log-date">'+fmtDate(d)+'</div></div>';
+      html+='<div class="budget-log-delta" style="color:'+(isPos?'var(--green)':'var(--red)')+'">'+(isPos?'+':'')+fmt(entry.delta)+'</div>';
+      html+='</div>';
+    }
+    list.innerHTML=html;
+  }
+  list.style.display='block';
+  btn.textContent='🧾 ซ่อนประวัติ';
+}
+function togSec(bodyId,chevId){
+  var b=safeGet(bodyId);var c=safeGet(chevId);
+  if(b)b.classList.toggle('collapsed');
+  if(c)c.classList.toggle('open');
+}
+
+// ════════════════════════════════════════════════
+// REORDER (same-section, desktop drag)
+// ════════════════════════════════════════════════
+var dragId=null;
+
+function showDropZones(show){
+  // no-op — drop zones removed
+}
+
+function onRowDragStart(e, subId){
+  dragId = subId;
+  e.dataTransfer.effectAllowed = 'move';
+  try{ e.dataTransfer.setData('text/plain', String(subId)); }catch(_){}
+  var el = e.currentTarget;
+  setTimeout(function(){ if(el) el.classList.add('drag-src'); }, 0);
+}
+
+function onRowDragEnd(e){
+  dragId = null;
+  var els = document.querySelectorAll('.drag-src,.drag-over-row');
+  for(var i=0;i<els.length;i++) els[i].classList.remove('drag-src','drag-over-row');
+}
+
+function onRowDragOver(e, targetSubId){
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  if(dragId === null || targetSubId === dragId) return;
+  var rows = document.querySelectorAll('.drag-over-row');
+  for(var i=0;i<rows.length;i++) rows[i].classList.remove('drag-over-row');
+  var el = e.currentTarget;
+  if(el) el.classList.add('drag-over-row');
+}
+
+function onRowDrop(e, targetSubId){
+  e.preventDefault();
+  var rows = document.querySelectorAll('.drag-over-row');
+  for(var i=0;i<rows.length;i++) rows[i].classList.remove('drag-over-row');
+  if(dragId === null || targetSubId === dragId) return;
+  var si = -1, ti = -1;
+  for(var i=0;i<subs.length;i++){
+    if(subs[i].id === dragId) si = i;
+    if(subs[i].id === targetSubId) ti = i;
+  }
+  if(si < 0 || ti < 0) return;
+  // only reorder within same section
+  if(subs[si].status !== subs[ti].status) return;
+  var item = subs.splice(si, 1)[0];
+  var ni = subs.indexOf(subs.filter(function(s){return s.id===targetSubId;})[0]);
+  // re-find after splice
+  ti = -1;
+  for(var i=0;i<subs.length;i++){if(subs[i].id===targetSubId){ti=i;break;}}
+  if(ti >= 0) subs.splice(ti, 0, item);
+  dragId = null;
+  saveSubs(); render();
+}
+
+// ── Cross-section move (button-based, no drag needed) ──
+function moveToSec(gi, targetSec){
+  var s = subs[gi];
+  s.status = targetSec;
+  if(targetSec === 'cancelled'){
+    if(!s.cancelDate) s.cancelDate = new Date().toISOString().split('T')[0];
+  } else {
+    s.cancelDate = '';
+  }
+  // expand target section
+  var body = safeGet(targetSec+'-body');
+  var chevMap = {'active':'cv-a','pending':'cv-p','cancelled':'cv-c'};
+  if(body && body.classList.contains('collapsed')){
+    body.classList.remove('collapsed');
+    var cv = safeGet(chevMap[targetSec]);
+    if(cv) cv.classList.add('open');
+  }
+  saveSubs(); render();
+}
+
+// ════════════════════════════════════════════════
+// MODAL
+// ════════════════════════════════════════════════
+var SLOTS=buildSlots(false);
+function selContract(el){
+  var opts=document.querySelectorAll('.cp-opt');for(var i=0;i<opts.length;i++)opts[i].classList.remove('on');
+  el.classList.add('on');safeGet('f-cycle').value=el.dataset.v;
+  updateYearlyCancelInfo();
+}
+function updateYearlyCancelInfo(){
+  var cycle=safeVal('f-cycle');
+  var info=safeGet('yearly-cancel-info');
+  if(!info)return;
+  if(cycle!=='yearly'){info.style.display='none';return;}
+  var rd=safeVal('f-renew');
+  if(!rd){info.style.display='none';return;}
+  var d=new Date(rd);d.setFullYear(d.getFullYear()+1);d.setDate(d.getDate()-1);
+  var lbl=safeGet('yearly-cancel-date');
+  if(lbl)lbl.textContent=fmtDate(d);
+  info.style.display='block';
+}
+function validateCancelDate(){
+  var cycle=safeVal('f-cycle');
+  if(cycle!=='yearly')return;
+  var rd=safeVal('f-renew');
+  var cd=safeVal('f-cancel');
+  if(!rd||!cd)return;
+  // earliest cancel = renewDate + 1 year - 1 day (i.e., day before next renewal)
+  var lockDate=new Date(rd);lockDate.setFullYear(lockDate.getFullYear()+1);lockDate.setDate(lockDate.getDate()-1);
+  var cancelDate=new Date(cd);
+  if(cancelDate<lockDate){
+    alert('⚠️ Yearly Contract\nยกเลิกได้หลัง '+fmtDate(lockDate)+' เท่านั้น\n\nวันที่เลือกยังอยู่ใน contract period');
+    safeGet('f-cancel').value='';
+  }
+}
+function selPriceType(el){
+  var opts=document.querySelectorAll('.pt-opt');for(var i=0;i<opts.length;i++)opts[i].classList.remove('on');
+  el.classList.add('on');safeGet('f-pricetype').value=el.dataset.v;
+  safeGet('price-fixed').style.display=el.dataset.v==='fixed'?'grid':'none';
+  safeGet('price-custom').style.display=el.dataset.v==='custom'?'block':'none';
+}
+function togglePastMonths(btn){
+  var w=safeGet('cg-past-wrap');if(!w)return;
+  var shown=w.style.display==='block';
+  w.style.display=shown?'none':'block';
+  btn.textContent=shown?'▾ ดูย้อนหลัง':'▲ ซ่อน';
+}
+function buildPastSlots(){
+  var arr=[];
+  for(var i=-6;i<=-1;i++){
+    var d=new Date(TODAY.getFullYear(),TODAY.getMonth()+i,1);
+    arr.push({y:d.getFullYear(),m:d.getMonth()+1,key:ymk(d.getFullYear(),d.getMonth()+1)});
+  }
+  return arr;
+}
+var MONTH_EN_SHORT=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function buildCustomGrid(existing){
+  var futureSlots=buildSlots(false);
+  var pastSlots=buildPastSlots();
+  // Past months grid — NO numbering, just month label (muted, hidden by default)
+  var phtml='<div id="cg-past-wrap" style="display:none;margin-bottom:10px"><div class="custom-grid">';
+  for(var j=0;j<pastSlots.length;j++){
+    var ps=pastSlots[j];var pval=(existing&&existing[ps.key])||'';
+    var pyy=String(ps.y).slice(-2);
+    phtml+='<div class="cg-cell"><label class="cg-lbl-past">'+MONTH_EN_SHORT[ps.m-1]+' \''+pyy+'</label>';
+    phtml+='<input type="number" inputmode="decimal" placeholder="—" value="'+pval+'" data-key="'+ps.key+'"></div>';
+  }
+  phtml+='</div></div>';
+  // Future months grid — numbered 1-12, starting from current month
+  var fhtml='<div class="custom-grid">';
+  for(var i=0;i<futureSlots.length;i++){
+    var sl=futureSlots[i];var val=(existing&&existing[sl.key])||'';
+    var yy=String(sl.y).slice(-2);
+    fhtml+='<div class="cg-cell"><label class="cg-lbl-future"><span class="cg-num">'+(i+1)+'</span><span class="cg-mo">'+MONTH_EN_SHORT[sl.m-1]+' \''+yy+'</span></label>';
+    fhtml+='<input type="number" inputmode="decimal" placeholder="—" value="'+val+'" data-key="'+sl.key+'"></div>';
+  }
+  fhtml+='</div>';
+  var toggleBtn='<button type="button" style="background:none;border:none;font-size:10px;color:var(--t3);cursor:pointer;padding:0 0 8px 0;display:block" onclick="togglePastMonths(this)">▾ ดูย้อนหลัง</button>';
+  safeGet('custom-grid').innerHTML=toggleBtn+phtml+fhtml;
+}
+function getCustomPrices(){
+  var prices={};
+  var inputs=safeGet('custom-grid').querySelectorAll('input');
+  for(var i=0;i<inputs.length;i++){
+    var k=inputs[i].dataset.key;var v=parseFloat(inputs[i].value);
+    if(!isNaN(v)&&v>0)prices[k]=v;
+  }
+  return prices;
+}
+function openModal(status){
+  editIdx=null;
+  safeGet('modal-ttl').textContent='เพิ่มรายการ';
+  ['f-name','f-price','f-note','f-renew','f-cancel'].forEach(function(id){var el=safeGet(id);if(el)el.value='';});
+  safeGet('f-payment').value='AIS';
+  safeGet('f-status').value=status||'active';
+  safeGet('f-cycle').value='monthly';
+  safeGet('f-pricetype').value='fixed';
+  document.querySelectorAll('.cp-opt').forEach(function(e){e.classList.toggle('on',e.dataset.v==='monthly');});
+  document.querySelectorAll('.pt-opt').forEach(function(e){e.classList.toggle('on',e.dataset.v==='fixed');});
+  safeGet('price-fixed').style.display='grid';
+  safeGet('price-custom').style.display='none';
+  buildCustomGrid({});
+  safeGet('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function editItem(gi){
+  editIdx=gi;var s=subs[gi];
+  safeGet('modal-ttl').textContent=s.name;
+  safeGet('f-name').value=s.name||'';
+  safeGet('f-price').value=s.price||'';
+
+  safeGet('f-payment').value=s.payment||'AIS';
+  safeGet('f-renew').value=s.renewDate||'';
+  safeGet('f-cancel').value=s.cancelDate||'';
+  safeGet('f-status').value=s.status||'active';
+  safeGet('f-note').value=s.note||'';
+  safeGet('f-cycle').value=s.cycle||'monthly';
+  safeGet('f-pricetype').value=s.pricetype||'fixed';
+  var isCustom=s.pricetype==='custom';
+  document.querySelectorAll('.cp-opt').forEach(function(e){e.classList.toggle('on',e.dataset.v===(s.cycle||'monthly'));});
+  document.querySelectorAll('.pt-opt').forEach(function(e){e.classList.toggle('on',e.dataset.v===(s.pricetype||'fixed'));});
+  safeGet('price-fixed').style.display=isCustom?'none':'grid';
+  safeGet('price-custom').style.display=isCustom?'block':'none';
+  buildCustomGrid(s.customPrices||{});
+  updateYearlyCancelInfo();
+  safeGet('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){safeGet('modal').classList.remove('open');document.body.style.overflow='';}
+function onOvClick(e){if(e.target===safeGet('modal'))closeModal();}
+function saveItem(){
+  var name=(safeVal('f-name')||'').trim();
+  if(!name){alert('กรุณาใส่ชื่อ Service');return;}
+  var pt=safeVal('f-pricetype')||'fixed';
+  var item={
+    id:editIdx!==null?subs[editIdx].id:Date.now(),
+    name:name,status:safeVal('f-status')||'active',
+    cycle:safeVal('f-cycle')||'monthly',
+    pricetype:pt,
+    price:pt==='custom'?0:(parseFloat(safeVal('f-price'))||0),
+    rate:1,
+    customPrices:pt==='custom'?getCustomPrices():{},
+    payment:safeVal('f-payment')||'AIS',
+    renewDate:safeVal('f-renew')||'',
+    cancelDate:safeVal('f-cancel')||'',
+    note:safeVal('f-note')||''
+  };
+  if(editIdx!==null)subs[editIdx]=item;else subs.push(item);
+  saveSubs();closeModal();render();
+}
+
+// Swipe to close modal
+var swipeY=0;
+var mbox=safeGet('modal-box');
+if(mbox){
+  mbox.addEventListener('touchstart',function(e){swipeY=e.touches[0].clientY;},{passive:true});
+  mbox.addEventListener('touchmove',function(e){var dy=e.touches[0].clientY-swipeY;if(dy>0)mbox.style.transform='translateY('+dy+'px)';},{passive:true});
+  mbox.addEventListener('touchend',function(e){var dy=e.changedTouches[0].clientY-swipeY;if(dy>80)closeModal();mbox.style.transform='';},{passive:true});
+}
+
+
+// ════════════════════════════════════════════════
+// SUPABASE SYNC
+// ════════════════════════════════════════════════
+var SB_URL='https://bfjjefklcvjyrxfetbuf.supabase.co';
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmamplZmtsY3ZqeXJ4ZmV0YnVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3NDM3MTUsImV4cCI6MjA5ODMxOTcxNX0.wcB0P_Idm-EkHrlGET_C4De0beCVNlagVosh_ry3208';
+var SB_HDRS={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'};
+var sbOnline=false;
+var sbTimer=null;
+
+function sbLoad(){
+  fetch(SB_URL+'/rest/v1/tracker?id=eq.main&select=subs,hist,budget,budget_log',{headers:SB_HDRS})
+    .then(function(r){return r.json();})
+    .then(function(rows){
+      if(rows&&rows[0]){
+        sbOnline=true;
+        var d=rows[0];
+        if(d.subs&&d.subs.length){subs=d.subs;try{localStorage.setItem('st_v7',JSON.stringify(subs));}catch(e){}}
+        if(d.hist&&Object.keys(d.hist).length){hist=d.hist;try{localStorage.setItem('sh_v7',JSON.stringify(hist));}catch(e){}}
+        if(d.budget&&d.budget>0){BUDGET=d.budget;try{localStorage.setItem('budget_v7',String(BUDGET));}catch(e){}}
+        if(d.budget_log&&d.budget_log.length){budgetLog=d.budget_log;try{localStorage.setItem('budgetlog_v7',JSON.stringify(budgetLog));}catch(e){}}
+        showSync('synced','var(--mint)');
+      }
+      autoCancel();autoSnapshot();render();updateToggleUI();
+    })
+    .catch(function(){
+      showSync('offline','var(--t3)');
+      autoCancel();autoSnapshot();render();updateToggleUI();
+    });
+}
+
+function sbSave(){
+  if(!sbOnline)return;
+  if(sbTimer)clearTimeout(sbTimer);
+  sbTimer=setTimeout(function(){
+    fetch(SB_URL+'/rest/v1/tracker?id=eq.main',{
+      method:'PATCH',headers:SB_HDRS,
+      body:JSON.stringify({subs:subs,hist:hist,budget:BUDGET,budget_log:budgetLog,updated_at:new Date().toISOString()})
+    })
+    .then(function(r){showSync(r.ok?'saved':'err','var(--mint)');})
+    .catch(function(){showSync('offline','var(--t3)');});
+  },1200);
+}
+
+function showSync(msg,color){
+  var el=document.getElementById('sync-status');
+  if(!el)return;
+  el.textContent=msg;
+  el.style.color=color;
+}
+
+// ════════════════════════════════════════════════
+// INIT
+function setHdrVar(){
+  var h=safeGet('main-hdr');
+  if(h)document.documentElement.style.setProperty('--hdr-h',h.getBoundingClientRect().height+'px');
+}
+// ════════════════════════════════════════════════
+setHdrVar();
+sbLoad();
+</script>
+</body>
+</html>
