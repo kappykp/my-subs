@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -55,6 +55,8 @@ body{padding-bottom:32px;max-width:900px;margin:0 auto}
 .hdr-inner{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;gap:10px}
 .brand{display:flex;align-items:center}
 .brand h1{font-size:15px;font-weight:600;color:var(--t1)}
+.hdr-io-btn{background:var(--bg3);border:1px solid var(--bd2);color:var(--t3);border-radius:7px;padding:5px 9px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;flex-shrink:0;line-height:1}
+.hdr-io-btn:active{background:var(--bd2);color:var(--t1)}
 .hdr-right{display:flex;gap:8px;align-items:center}
 
 /* ── BUTTONS ── */
@@ -170,12 +172,22 @@ body{padding-bottom:32px;max-width:900px;margin:0 auto}
 .stat-row-bar-fill{height:100%;background:var(--gp);border-radius:2px;transition:width .4s}
 .stat-row-sub{font-size:11px;color:var(--t3)}
 
+.dp-row{display:grid;grid-template-columns:1fr 1.6fr 1.3fr;gap:8px;margin-bottom:16px}
+.dp-sel{font-size:15px;padding:10px 8px}
 /* ── CHART ── */
 .chart-wrap{margin:12px 16px;background:var(--bg2);border:1px solid rgba(192,132,252,.1);border-radius:var(--r);padding:14px 16px;overflow-x:auto}
 .chart-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .chart-title{font-size:11px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.6px}
 .mgrid{display:grid;grid-template-columns:repeat(12,1fr);gap:6px;min-width:480px}
 .mcol{text-align:center}
+.mcol-click{cursor:pointer;transition:opacity .15s;border-radius:6px;padding:2px 0}
+.mcol-click:active{opacity:.6}
+.mdetail-list{display:flex;flex-direction:column;gap:9px}
+.mdetail-row{display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.mdetail-name{color:var(--t2)}
+.mdetail-val{font-family:'Geist Mono',monospace;font-weight:600;color:var(--t1)}
+.mdetail-total{display:flex;justify-content:space-between;padding-top:11px;margin-top:10px;border-top:1px solid var(--bd);font-size:14px;font-weight:600}
+.mdetail-total span:last-child{font-family:'Geist Mono',monospace;color:#C084FC}
 .mlbl{font-size:11px;color:var(--t3);margin-bottom:5px}
 .mlbl.cur{color:var(--violet);font-weight:600;font-size:12px}
 .bwrap{height:54px;display:flex;align-items:flex-end;justify-content:center;position:relative}
@@ -336,6 +348,8 @@ body{padding-bottom:32px;max-width:900px;margin:0 auto}
       <h1>My Subscriptions</h1>
     </div>
     <div class="hdr-right">
+      <button class="hdr-io-btn" onclick="exportData()" title="Export">↓</button>
+      <label class="hdr-io-btn" title="Import" style="cursor:pointer">↑<input type="file" accept=".json" onchange="importData(event)" style="display:none"></label>
       <span id="sync-status" style="font-size:10px;color:var(--t3);font-family:'Geist Mono',monospace;opacity:.7"></span>
       <div class="view-toggle" id="view-toggle" onclick="flipView()">
         <div class="vt-slider" id="vt-slider"></div>
@@ -394,7 +408,7 @@ body{padding-bottom:32px;max-width:900px;margin:0 auto}
   <div class="sec-body" id="active-body">
     <div class="sec-body-inner">
       <table class="desktop-table">
-        <thead><tr><th style="width:18px"></th><th>App</th><th class="r th-sort" onclick="toggleSort('price')"><span>ราคา</span> <span id="sort-arr-price" class="sort-arr"></span></th><th class="th-sort" onclick="toggleSort('renew')"><span>Renew</span> <span id="sort-arr-renew" class="sort-arr"></span></th><th>Contract</th><th>ช่องทาง</th><th class="r">จัดการ</th></tr></thead>
+        <thead><tr><th style="width:18px"></th><th class="th-sort" onclick="toggleSort('name')">App <span id="sort-arr-name" class="sort-arr"></span></th><th class="r th-sort" onclick="toggleSort('price')"><span>ราคา</span> <span id="sort-arr-price" class="sort-arr"></span></th><th class="th-sort" onclick="toggleSort('renew')"><span>Renew</span> <span id="sort-arr-renew" class="sort-arr"></span></th><th>Contract</th><th>ช่องทาง</th><th class="r">จัดการ</th></tr></thead>
         <tbody id="dtb-active"></tbody>
       </table>
       <div class="mobile-cards" id="mc-active"></div>
@@ -411,7 +425,7 @@ body{padding-bottom:32px;max-width:900px;margin:0 auto}
   <div class="sec-body" id="pending-body">
     <div class="sec-body-inner">
       <table class="desktop-table">
-        <thead><tr><th style="width:18px"></th><th>App</th><th class="r th-sort" onclick="toggleSort('price')"><span>ราคา</span> <span id="sort-arr-price" class="sort-arr"></span></th><th class="th-sort" onclick="toggleSort('renew')"><span>Renew</span> <span id="sort-arr-renew" class="sort-arr"></span></th><th>Contract</th><th>ช่องทาง</th><th class="r">จัดการ</th></tr></thead>
+        <thead><tr><th style="width:18px"></th><th class="th-sort" onclick="toggleSort('name')">App <span id="sort-arr-name" class="sort-arr"></span></th><th class="r th-sort" onclick="toggleSort('price')"><span>ราคา</span> <span id="sort-arr-price" class="sort-arr"></span></th><th class="th-sort" onclick="toggleSort('renew')"><span>Renew</span> <span id="sort-arr-renew" class="sort-arr"></span></th><th>Contract</th><th>ช่องทาง</th><th class="r">จัดการ</th></tr></thead>
         <tbody id="dtb-pending"></tbody>
       </table>
       <div class="mobile-cards" id="mc-pending"></div>
@@ -440,7 +454,7 @@ body{padding-bottom:32px;max-width:900px;margin:0 auto}
   <div class="sec-body collapsed" id="cancelled-body">
     <div class="sec-body-inner">
       <table class="desktop-table">
-        <thead><tr><th style="width:18px"></th><th>App</th><th class="r">ราคา</th><th>ยกเลิก</th><th>Contract</th><th>ช่องทาง</th><th class="r">จัดการ</th></tr></thead>
+        <thead><tr><th style="width:18px"></th><th class="th-sort" onclick="toggleSort('name')">App <span id="sort-arr-name" class="sort-arr"></span></th><th class="r">ราคา</th><th>ยกเลิก</th><th>Contract</th><th>ช่องทาง</th><th class="r">จัดการ</th></tr></thead>
         <tbody id="dtb-cancelled"></tbody>
       </table>
       <div class="mobile-cards" id="mc-cancelled"></div>
@@ -493,7 +507,7 @@ body{padding-bottom:32px;max-width:900px;margin:0 auto}
         <select class="fs" id="f-payment"><option value="AIS">AIS</option><option value="Credit Card">Credit Card</option><option value="Other">Other</option></select>
       </div>
       <div class="fl" style="margin:0"><label>Renew Date</label>
-        <input class="fi" id="f-renew" type="date" oninput="updateYearlyCancelInfo()">
+        <input class="fi" id="f-renew" type="text" readonly placeholder="เลือกวันที่" onclick="openDatePick('f-renew')" style="cursor:pointer">
       </div>
     </div>
     <div id="yearly-cancel-info" style="display:none;font-size:11px;color:var(--t3);background:var(--bg3);border-radius:7px;padding:7px 10px;margin-bottom:13px">
@@ -508,7 +522,7 @@ body{padding-bottom:32px;max-width:900px;margin:0 auto}
         </select>
       </div>
       <div class="fl" style="margin:0"><label>Cancel Date</label>
-        <input class="fi" id="f-cancel" type="date" oninput="validateCancelDate()">
+        <input class="fi" id="f-cancel" type="text" readonly placeholder="เลือกวันที่" onclick="openDatePick('f-cancel')" style="cursor:pointer">
       </div>
     </div>
     <div class="fl"><label>หมายเหตุ</label>
@@ -519,6 +533,27 @@ body{padding-bottom:32px;max-width:900px;margin:0 auto}
       <button class="btn btn-p" onclick="saveItem()">บันทึก</button>
     </div>
   </div>
+</div>
+
+<!-- CUSTOM DATE PICKER -->
+<div class="modal-ov" id="datepick-modal" onclick="if(event.target===this)closeDatePick()">
+  <div class="modal-box">
+    <div class="modal-ttl">เลือกวันที่</div>
+    <div class="dp-row">
+      <select class="fs dp-sel" id="dp-day"></select>
+      <select class="fs dp-sel" id="dp-month"></select>
+      <select class="fs dp-sel" id="dp-year"></select>
+    </div>
+    <div class="modal-acts">
+      <button class="btn btn-ghost" onclick="closeDatePick()">ยกเลิก</button>
+      <button class="btn btn-p" onclick="confirmDatePick()">เลือก</button>
+    </div>
+  </div>
+</div>
+
+<!-- MONTH DETAIL POPUP -->
+<div class="modal-ov" id="mdetail-modal" onclick="if(event.target===this)closeMonthDetail()">
+  <div class="modal-box" id="mdetail-content"></div>
 </div>
 
 <!-- SUMMARY BOTTOM SHEET -->
@@ -611,12 +646,66 @@ body{padding-bottom:32px;max-width:900px;margin:0 auto}
 // ════════════════════════════════════════════════
 function safeGet(id){return document.getElementById(id);}
 function safeVal(id){var el=safeGet(id);return el?el.value:'';}
+function dateVal(id){var el=safeGet(id);return el?(el.dataset.iso||''):'';}
+function setDateVal(id,iso){
+  var el=safeGet(id);if(!el)return;
+  el.dataset.iso=iso||'';
+  el.value=iso?fmtDateISO(iso):'';
+}
+function fmtDateISO(iso){
+  // iso = 'YYYY-MM-DD' → display 'D MMM YYYY' always in CE, no locale dependency
+  var p=iso.split('-');if(p.length!==3)return iso;
+  var y=parseInt(p[0]),m=parseInt(p[1]),d=parseInt(p[2]);
+  if(!y||!m||!d)return iso;
+  return d+' '+MONTH_TH[m-1]+' '+y;
+}
 
 // ════════════════════════════════════════════════
 // CONSTANTS
 // ════════════════════════════════════════════════
 var TODAY=new Date();
 var MONTH_TH=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+
+// ════════════════════════════════════════════════
+// CUSTOM DATE PICKER (no native iOS picker → avoids Buddhist calendar)
+// ════════════════════════════════════════════════
+var dpTargetId='';
+function openDatePick(targetId){
+  dpTargetId=targetId;
+  var iso=dateVal(targetId);
+  var now=new Date();
+  var y=now.getFullYear(),m=now.getMonth()+1,d=now.getDate();
+  if(iso){
+    var p=iso.split('-');
+    if(p.length===3){y=parseInt(p[0]);m=parseInt(p[1]);d=parseInt(p[2]);}
+  }
+  var daySel=safeGet('dp-day'),moSel=safeGet('dp-month'),yrSel=safeGet('dp-year');
+  var dh='';for(var i=1;i<=31;i++)dh+='<option value="'+i+'"'+(i===d?' selected':'')+'>'+i+'</option>';
+  daySel.innerHTML=dh;
+  var mh='';for(var j=0;j<12;j++)mh+='<option value="'+(j+1)+'"'+((j+1)===m?' selected':'')+'>'+MONTH_TH[j]+'</option>';
+  moSel.innerHTML=mh;
+  var yh='';var curY=now.getFullYear();
+  for(var yy=curY-3;yy<=curY+5;yy++)yh+='<option value="'+yy+'"'+(yy===y?' selected':'')+'>'+yy+'</option>';
+  yrSel.innerHTML=yh;
+  safeGet('datepick-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeDatePick(){
+  safeGet('datepick-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function confirmDatePick(){
+  var d=parseInt(safeVal('dp-day'));
+  var m=parseInt(safeVal('dp-month'));
+  var y=parseInt(safeVal('dp-year'));
+  var dd=String(d).padStart(2,'0');
+  var mm=String(m).padStart(2,'0');
+  var iso=y+'-'+mm+'-'+dd;
+  setDateVal(dpTargetId,iso);
+  closeDatePick();
+  if(dpTargetId==='f-renew')updateYearlyCancelInfo();
+  if(dpTargetId==='f-cancel')validateCancelDate();
+}
 var BUDGET=parseInt(localStorage.getItem("budget_v7")||"30000");
 function loadBudgetLog(){try{var b=localStorage.getItem('budgetlog_v7');return b?JSON.parse(b):[];}catch(e){return [];}}
 function saveBudgetLog(){try{localStorage.setItem('budgetlog_v7',JSON.stringify(budgetLog));}catch(e){}sbSave();}
@@ -857,6 +946,7 @@ function sortedList(list){
   if(!sortCol)return list;
   var copy=list.slice();
   copy.sort(function(a,b){
+    if(sortCol==='name'){return a.name.localeCompare(b.name,'th')*sortDir;}
     if(sortCol==='price'){
       var pa=displayPrice(a,false)||0;
       var pb=displayPrice(b,false)||0;
@@ -917,8 +1007,10 @@ function render(){
   }
   var remEl=safeGet('s-remain');
   if(remEl){
-    remEl.textContent='จาก ฿'+BUDGET.toLocaleString('th-TH');
-    remEl.style.color=usePct>=100?'var(--red)':usePct>=80?'var(--amber)':'var(--t3)';
+    var remAbs=Math.abs(remain);
+    var remStr=remAbs>=10000?'฿'+(remAbs/1000).toFixed(1)+'k':fmt(remAbs);
+    remEl.textContent=remain>=0?'+'+remStr:'−'+remStr;
+    remEl.style.color=usePct>=100?'var(--red)':usePct>=80?'var(--amber)':'var(--t2)';
   }
   var paidPct=Math.min(BUDGET>0?(spentTotal/BUDGET)*100:0,100);
   var curPct=Math.min(BUDGET>0?(curCost/BUDGET)*100:0,100);
@@ -953,7 +1045,7 @@ function renderChart(slots,costs){
     else if(sl.isCurrent){col='#C084FC';op=1;lblCls=' cur';}
     else{col='#2DD4BF';op=0.4;}
     var isPaid=isSlotPaid(sl.key);
-    html+='<div class="mcol">';
+    html+='<div class="mcol mcol-click" onclick="openMonthDetail(\''+sl.key+'\')">';
     html+='<div class="mlbl'+lblCls+'">'+MONTH_TH[sl.m-1].replace('.','')+'</div>';
     var barStyle='height:'+h+'px;background:'+col+';opacity:'+op;
     if(isPaid)barStyle+=';box-shadow:0 -3px 0 0 #2DD4BF,0 0 12px rgba(45,212,191,.5)';
@@ -962,6 +1054,45 @@ function renderChart(slots,costs){
     html+='</div>';
   }
   safeGet('mgrid').innerHTML=html;
+}
+
+function openMonthDetail(key){
+  var parts=key.split('-');var y=parseInt(parts[0]);var m=parseInt(parts[1]);
+  var active=subs.filter(function(s){return s.status==='active';});
+  var isPaid=isSlotPaid(key);
+  var rows=[];
+  if(isPaid&&hist[key]&&hist[key].items){
+    for(var i=0;i<hist[key].items.length;i++){
+      rows.push({name:hist[key].items[i].name,price:hist[key].items[i].price||0});
+    }
+  }else{
+    for(var j=0;j<active.length;j++){
+      var cost=slotCost(active[j],key);
+      if(cost>0)rows.push({name:active[j].name,price:cost});
+    }
+  }
+  rows.sort(function(a,b){return b.price-a.price;});
+  var total=rows.reduce(function(s,r){return s+r.price;},0);
+
+  var html='<div class="modal-ttl">'+MONTH_TH[m-1]+' '+y+(isPaid?' · ชำระแล้ว':' · คาดการณ์')+'</div>';
+  if(!rows.length){
+    html+='<div style="text-align:center;color:var(--t3);font-size:13px;padding:24px 10px">ไม่มีรายจ่ายเดือนนี้</div>';
+  }else{
+    html+='<div class="mdetail-list">';
+    for(var k=0;k<rows.length;k++){
+      html+='<div class="mdetail-row"><span class="mdetail-name">'+escH(rows[k].name)+'</span><span class="mdetail-val">'+fmt(rows[k].price)+'</span></div>';
+    }
+    html+='</div>';
+    html+='<div class="mdetail-total"><span>รวม</span><span>'+fmt(total)+'</span></div>';
+  }
+  html+='<div class="modal-acts" style="margin-top:18px"><button class="btn btn-ghost" onclick="closeMonthDetail()" style="width:100%">ปิด</button></div>';
+  safeGet('mdetail-content').innerHTML=html;
+  safeGet('mdetail-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeMonthDetail(){
+  safeGet('mdetail-modal').classList.remove('open');
+  document.body.style.overflow='';
 }
 
 var statsViewOn=false;
@@ -1535,7 +1666,7 @@ function updateYearlyCancelInfo(){
   var info=safeGet('yearly-cancel-info');
   if(!info)return;
   if(cycle!=='yearly'){info.style.display='none';return;}
-  var rd=safeVal('f-renew');
+  var rd=dateVal('f-renew');
   if(!rd){info.style.display='none';return;}
   var d=new Date(rd);d.setFullYear(d.getFullYear()+1);d.setDate(d.getDate()-1);
   var lbl=safeGet('yearly-cancel-date');
@@ -1545,15 +1676,15 @@ function updateYearlyCancelInfo(){
 function validateCancelDate(){
   var cycle=safeVal('f-cycle');
   if(cycle!=='yearly')return;
-  var rd=safeVal('f-renew');
-  var cd=safeVal('f-cancel');
+  var rd=dateVal('f-renew');
+  var cd=dateVal('f-cancel');
   if(!rd||!cd)return;
   // earliest cancel = renewDate + 1 year - 1 day (i.e., day before next renewal)
   var lockDate=new Date(rd);lockDate.setFullYear(lockDate.getFullYear()+1);lockDate.setDate(lockDate.getDate()-1);
   var cancelDate=new Date(cd);
   if(cancelDate<lockDate){
     alert('⚠️ Yearly Contract\nยกเลิกได้หลัง '+fmtDate(lockDate)+' เท่านั้น\n\nวันที่เลือกยังอยู่ใน contract period');
-    safeGet('f-cancel').value='';
+    setDateVal('f-cancel','');
   }
 }
 function selPriceType(el){
@@ -1613,7 +1744,8 @@ function getCustomPrices(){
 function openModal(status){
   editIdx=null;
   safeGet('modal-ttl').textContent='เพิ่มรายการ';
-  ['f-name','f-price','f-note','f-renew','f-cancel'].forEach(function(id){var el=safeGet(id);if(el)el.value='';});
+  ['f-name','f-price','f-note'].forEach(function(id){var el=safeGet(id);if(el)el.value='';});
+  setDateVal('f-renew','');setDateVal('f-cancel','');
   safeGet('f-payment').value='AIS';
   safeGet('f-status').value=status||'active';
   safeGet('f-cycle').value='monthly';
@@ -1633,8 +1765,8 @@ function editItem(gi){
   safeGet('f-price').value=s.price||'';
 
   safeGet('f-payment').value=s.payment||'AIS';
-  safeGet('f-renew').value=s.renewDate||'';
-  safeGet('f-cancel').value=s.cancelDate||'';
+  setDateVal('f-renew',s.renewDate||'');
+  setDateVal('f-cancel',s.cancelDate||'');
   safeGet('f-status').value=s.status||'active';
   safeGet('f-note').value=s.note||'';
   safeGet('f-cycle').value=s.cycle||'monthly';
@@ -1664,8 +1796,8 @@ function saveItem(){
     rate:1,
     customPrices:pt==='custom'?getCustomPrices():{},
     payment:safeVal('f-payment')||'AIS',
-    renewDate:safeVal('f-renew')||'',
-    cancelDate:safeVal('f-cancel')||'',
+    renewDate:dateVal('f-renew')||'',
+    cancelDate:dateVal('f-cancel')||'',
     note:safeVal('f-note')||''
   };
   if(editIdx!==null)subs[editIdx]=item;else subs.push(item);
@@ -1683,6 +1815,39 @@ if(mbox){
 
 
 // ════════════════════════════════════════════════
+// EXPORT / IMPORT
+// ════════════════════════════════════════════════
+function exportData(){
+  var data={subs:subs,hist:hist,budget:BUDGET,budgetLog:budgetLog,at:new Date().toISOString()};
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download='my-subs-'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(function(){URL.revokeObjectURL(url);},1000);
+}
+function importData(ev){
+  var file=ev.target.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      var data=JSON.parse(e.target.result);
+      if(!confirm('นำเข้าข้อมูลจากไฟล์? ข้อมูลปัจจุบันจะถูกแทนที่'))return;
+      if(data.subs)subs=data.subs;
+      if(data.hist)hist=data.hist;
+      if(data.budget)BUDGET=data.budget;
+      if(data.budgetLog)budgetLog=data.budgetLog;
+      saveSubs();saveHist();
+      try{localStorage.setItem('budget_v7',String(BUDGET));}catch(ex){}
+      saveBudgetLog();render();
+      showSync('imported','#2DD4BF');
+    }catch(err){alert('ไฟล์ไม่ถูกต้อง');}
+  };
+  reader.readAsText(file);
+  ev.target.value='';
+}
+
+// ════════════════════════════════════════════════
 // SUPABASE SYNC
 // ════════════════════════════════════════════════
 var SB_URL='https://bfjjefklcvjyrxfetbuf.supabase.co';
@@ -1693,7 +1858,10 @@ var sbTimer=null;
 
 function sbLoad(){
   fetch(SB_URL+'/rest/v1/tracker?id=eq.main&select=subs,hist,budget,budget_log',{headers:SB_HDRS})
-    .then(function(r){return r.json();})
+    .then(function(r){
+      if(!r.ok){showSync('err '+r.status,'var(--red)');throw new Error('HTTP '+r.status);}
+      return r.json();
+    })
     .then(function(rows){
       if(rows&&rows[0]){
         sbOnline=true;
@@ -1703,11 +1871,14 @@ function sbLoad(){
         if(d.budget&&d.budget>0){BUDGET=d.budget;try{localStorage.setItem('budget_v7',String(BUDGET));}catch(e){}}
         if(d.budget_log&&d.budget_log.length){budgetLog=d.budget_log;try{localStorage.setItem('budgetlog_v7',JSON.stringify(budgetLog));}catch(e){}}
         showSync('synced','var(--mint)');
+      }else{
+        showSync('no row','var(--amber)');
       }
       autoCancel();autoSnapshot();render();updateToggleUI();
     })
-    .catch(function(){
+    .catch(function(err){
       showSync('offline','var(--t3)');
+      console.log('sbLoad error:',err);
       autoCancel();autoSnapshot();render();updateToggleUI();
     });
 }
@@ -1730,6 +1901,10 @@ function showSync(msg,color){
   if(!el)return;
   el.textContent=msg;
   el.style.color=color;
+  el.style.opacity='1';
+  if(msg==='synced'||msg==='saved'){
+    setTimeout(function(){var e=document.getElementById('sync-status');if(e)e.style.opacity='.35';},4000);
+  }
 }
 
 // ════════════════════════════════════════════════
