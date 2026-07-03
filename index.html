@@ -1857,7 +1857,7 @@ var sbOnline=false;
 var sbTimer=null;
 
 function sbLoad(){
-  fetch(SB_URL+'/rest/v1/tracker?id=eq.main&select=subs,hist,budget,budget_log',{headers:SB_HDRS})
+  fetch(SB_URL+'/rest/v1/tracker_data?id=eq.main&select=subs,hist,budget,budget_log',{headers:SB_HDRS})
     .then(function(r){
       if(!r.ok){showSync('err '+r.status,'var(--red)');throw new Error('HTTP '+r.status);}
       return r.json();
@@ -1887,7 +1887,7 @@ function sbSave(){
   if(!sbOnline)return;
   if(sbTimer)clearTimeout(sbTimer);
   sbTimer=setTimeout(function(){
-    fetch(SB_URL+'/rest/v1/tracker?id=eq.main',{
+    fetch(SB_URL+'/rest/v1/tracker_data?id=eq.main',{
       method:'PATCH',headers:SB_HDRS,
       body:JSON.stringify({subs:subs,hist:hist,budget:BUDGET,budget_log:budgetLog,updated_at:new Date().toISOString()})
     })
