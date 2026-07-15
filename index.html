@@ -285,6 +285,15 @@ body{padding-bottom:32px;max-width:900px;margin:0 auto}
 /* ── HISTORY ── */
 .hist-box{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
 .hist-row{padding:13px 14px;border-bottom:1px solid var(--bd)}
+.hist-clickable{cursor:pointer;transition:background .15s}
+.hist-clickable:active{background:rgba(192,132,252,.04)}
+.he-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 2px;border-bottom:1px solid var(--bd)}
+.he-row:last-child{border-bottom:none}
+.he-name{font-size:14px;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+.he-right{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.he-cur{font-size:13px;color:var(--t3);font-family:'Geist Mono',monospace}
+.he-price{width:90px;text-align:right;font-family:'Geist Mono',monospace;font-size:15px;font-weight:600;background:var(--bg3);border:1.5px solid var(--bd2);border-radius:8px;color:var(--t1);padding:7px 10px;outline:none;-webkit-appearance:none;appearance:none}
+.he-price:focus{border-color:rgba(192,132,252,.6)}
 .hist-row:last-child{border-bottom:none}
 .hist-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px}
 .hist-range{font-size:14px;font-weight:600;color:var(--t1);display:flex;align-items:center;gap:8px}
@@ -322,7 +331,7 @@ body{padding-bottom:32px;max-width:900px;margin:0 auto}
 .cp-opt .cm{font-size:14px;font-weight:500;color:var(--t1)}
 .cp-opt .cs{font-size:12px;color:var(--t3);margin-top:3px}
 .cp-opt.on .cm{color:#C084FC}
-.price-type-pick{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px}
+.price-type-pick{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:13px}
 .pt-opt{padding:9px 12px;background:var(--bg3);border:1.5px solid var(--bd2);border-radius:11px;cursor:pointer;transition:all .2s;text-align:center}
 .pt-opt.on{background:rgba(107,127,212,.09);border-color:var(--violet)}
 .pt-opt .pm{font-size:13px;font-weight:500;color:var(--t1)}
@@ -484,14 +493,15 @@ body{padding-bottom:32px;max-width:900px;margin:0 auto}
     <!-- Part 2: Price type -->
     <div style="margin-top:14px;margin-bottom:8px"></div>
     <div class="price-type-pick">
-      <div class="pt-opt on" data-v="fixed" onclick="selPriceType(this)"><div class="pm">คงที่</div><div class="ps">ราคาเดียวตลอด</div></div>
-      <div class="pt-opt" data-v="custom" onclick="selPriceType(this)"><div class="pm">Custom</div><div class="ps">ราคาแตกต่างรายเดือน</div></div>
+      <div class="pt-opt on" data-v="fixed" onclick="selPriceType(this)"><div class="pm">คงที่</div><div class="ps">ต่อเดือน</div></div>
+      <div class="pt-opt" data-v="custom" onclick="selPriceType(this)"><div class="pm">Custom</div><div class="ps">แยกรายเดือน</div></div>
+      <div class="pt-opt" data-v="lump" onclick="selPriceType(this)"><div class="pm">เหมาจ่าย</div><div class="ps">ครั้งเดียว/ปี</div></div>
     </div>
     <input type="hidden" id="f-pricetype" value="fixed">
 
     <!-- Fixed price row -->
     <div id="price-fixed">
-      <div class="fl"><label>ราคาต่อเดือน (บาท)</label>
+      <div class="fl"><label id="f-price-label">ราคาต่อเดือน (บาท)</label>
         <input class="fi" id="f-price" type="number" placeholder="0" step="0.01" inputmode="decimal">
       </div>
     </div>
@@ -535,6 +545,11 @@ body{padding-bottom:32px;max-width:900px;margin:0 auto}
       <button class="btn btn-p" onclick="saveItem()">บันทึก</button>
     </div>
   </div>
+</div>
+
+<!-- HIST EDIT MODAL -->
+<div class="modal-ov" id="histedit-modal" onclick="if(event.target===this)closeHistEdit()">
+  <div class="modal-box" id="histedit-content"></div>
 </div>
 
 <!-- CUSTOM DATE PICKER -->
@@ -836,7 +851,8 @@ function autoCancel(){
 
 // ── AUTO-SNAPSHOT day 10 ──
 function autoSnapshot(){
-  if(TODAY.getDate()!==10)return;
+  // Snapshot once we're on/past day 10 — works retroactively if app wasn't opened on the 10th
+  if(TODAY.getDate()<10)return;
   if(hist[CUR_BP])return;
   var items=[];
   for(var i=0;i<subs.length;i++){
@@ -851,11 +867,82 @@ function autoSnapshot(){
   saveHist();
 }
 
+var editHistKey='';
+function openHistEdit(bpKey){
+  editHistKey=bpKey;
+  var h=hist[bpKey];if(!h)return;
+  var items=h.items||[];
+  var html='<div class="modal-ttl">แก้ไขรอบบิล · '+billingLabel(bpKey)+'</div>';
+  html+='<div id="he-list">';
+  for(var i=0;i<items.length;i++){
+    html+='<div class="he-row">';
+    html+='<span class="he-name">'+escH(items[i].name)+'</span>';
+    html+='<div class="he-right">';
+    html+='<span class="he-cur">฿</span>';
+    html+='<input class="he-price" type="number" inputmode="decimal" value="'+(items[i].price||0)+'" data-idx="'+i+'">';
+    html+='</div></div>';
+  }
+  html+='</div>';
+  html+='<div class="modal-acts" style="margin-top:18px">';
+  html+='<button class="btn btn-ghost" onclick="closeHistEdit()">ยกเลิก</button>';
+  html+='<button class="btn btn-p" onclick="saveHistEdit()">บันทึก</button>';
+  html+='</div>';
+  safeGet('histedit-content').innerHTML=html;
+  safeGet('histedit-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeHistEdit(){
+  safeGet('histedit-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function saveHistEdit(){
+  var h=hist[editHistKey];if(!h)return;
+  var inputs=document.querySelectorAll('#he-list .he-price');
+  for(var i=0;i<inputs.length;i++){
+    var idx=parseInt(inputs[i].dataset.idx);
+    var v=parseFloat(inputs[i].value);
+    var newPrice=isNaN(v)?0:v;
+    if(!h.items[idx])continue;
+    var oldPrice=h.items[idx].price||0;
+    h.items[idx].price=newPrice;
+    // Sync back: update the subscription's price for this month
+    if(newPrice!==oldPrice){
+      var appName=h.items[idx].name;
+      for(var si=0;si<subs.length;si++){
+        if(subs[si].name===appName){
+          var s=subs[si];
+          if(s.pricetype==='custom'){
+            if(!s.customPrices)s.customPrices={};
+            s.customPrices[editHistKey]=String(newPrice);
+          }else{
+            // fixed price — only update if this bill is the current period
+            if(editHistKey===CUR_BP)s.price=newPrice;
+          }
+          break;
+        }
+      }
+    }
+  }
+  h.total=h.items.reduce(function(a,it){return a+(it.price||0);},0);
+  h.savedAt=new Date().toISOString();
+  saveSubs();
+  saveHist();
+  render();
+  closeHistEdit();
+}
+
 // ── PRICE HELPERS (all in THB) ──
 function getMonthPrice(sub,slotKey){
   if(sub.pricetype==='custom'){
     var v=sub.customPrices&&sub.customPrices[slotKey];
     return v?parseFloat(v):0;
+  }
+  if(sub.pricetype==='lump'){
+    // one-time yearly payment — charge only in the renew anniversary month
+    if(!sub.renewDate)return 0;
+    var rm=parseInt(sub.renewDate.split('-')[1]); // renew month 1-12
+    var sm=parseInt(slotKey.split('-')[1]);
+    return sm===rm?(sub.price||0):0;
   }
   // fixed
   var base=sub.price||0;
@@ -872,6 +959,10 @@ function displayPrice(sub,showYearly){
     var p=v?parseFloat(v):0;
     if(showYearly){var slots=buildSlots(false);var tot=0;for(var i=0;i<slots.length;i++){var vv=sub.customPrices&&sub.customPrices[slots[i].key];if(vv)tot+=parseFloat(vv);}return tot;}
     return p;
+  }
+  if(sub.pricetype==='lump'){
+    // one-time yearly — same figure in both views (it IS the yearly total)
+    return sub.price||0;
   }
   var base=sub.price||0;
   return showYearly?base*12:base;
@@ -1197,7 +1288,8 @@ function renderDesktopTable(sec,list){
     var p=displayPrice(s,viewMode==='yearly');
     var showPerYear=viewMode==='yearly';
     var missingPrice=sec==='active'&&isCustomPriceMissing(s);
-    var ph=p>0?fmt(p)+'<span class="pp">'+(showPerYear?'/ปี':'/เดือน')+'</span>':(missingPrice?'<span class="tbd-warn" title="ยังไม่ได้กรอกราคาเดือนนี้ — แตะเพื่อแก้ไข">⚠ TBD</span>':'<span style="color:var(--t3)">TBD</span>');
+    var unitLbl=s.pricetype==='lump'?'/ปี':(showPerYear?'/ปี':'/เดือน');
+    var ph=p>0?fmt(p)+'<span class="pp">'+unitLbl+'</span>':(missingPrice?'<span class="tbd-warn" title="ยังไม่ได้กรอกราคาเดือนนี้ — แตะเพื่อแก้ไข">⚠ TBD</span>':'<span style="color:var(--t3)">TBD</span>');
     var ycb=yearlyCancelBy(s);
     var ycbTxt=ycb&&sec!=='cancelled'?'<div style="font-size:9px;color:var(--t3);opacity:.6;margin-top:1px">until '+fmtDate(ycb)+'</div>':'';
     var countdownPill=ri.countdown?'<span class="renew-pill '+ri.cls+'">'+ri.countdown+'</span>':'';
@@ -1236,7 +1328,8 @@ function renderMobileCards(sec,list){
     var p=displayPrice(s,viewMode==='yearly');
     var showPerYearM=viewMode==='yearly';
     var missingPriceM=sec==='active'&&isCustomPriceMissing(s);
-    var ph=p>0?fmt(p)+'<span class="pp">'+(showPerYearM?'/ปี':'/เดือน')+'</span>':(missingPriceM?'<span class="tbd-warn">⚠ TBD</span>':'TBD');
+    var unitLblM=s.pricetype==='lump'?'/ปี':(showPerYearM?'/ปี':'/เดือน');
+    var ph=p>0?fmt(p)+'<span class="pp">'+unitLblM+'</span>':(missingPriceM?'<span class="tbd-warn">⚠ TBD</span>':'TBD');
     var canUp=i>0;var canDown=i<list.length-1;
     html+='<div class="mcard '+(sec==='active'?'act':sec==='pending'?'pend':'canc')+'" data-gi="'+gi+'" onclick="handleCardClick(event,'+gi+')">';
     html+='<div class="mcard-top">'+logoEl(s.name,true);
@@ -1279,7 +1372,7 @@ function renderHist(){
   var html='';
   for(var i=0;i<keys.length;i++){
     var k=keys[i];var h=hist[k];var isPaid=h.paid||false;var items=h.items||[];
-    html+='<div class="hist-row"><div class="hist-top"><div>';
+    html+='<div class="hist-row hist-clickable" onclick="if(!isInsideBtn(event.target))openHistEdit(\''+k+'\')"><div class="hist-top"><div>';
     var appCount=items.length;
     html+='<div class="hist-range">'+billingLabel(k)+'<span class="hist-app-count">'+appCount+' แอพ</span></div>';
     html+='<div class="hist-date">บันทึก '+(h.savedAt?fmtDate(new Date(h.savedAt)):'-')+'</div>';
@@ -1692,8 +1785,11 @@ function validateCancelDate(){
 function selPriceType(el){
   var opts=document.querySelectorAll('.pt-opt');for(var i=0;i<opts.length;i++)opts[i].classList.remove('on');
   el.classList.add('on');safeGet('f-pricetype').value=el.dataset.v;
-  safeGet('price-fixed').style.display=el.dataset.v==='fixed'?'grid':'none';
-  safeGet('price-custom').style.display=el.dataset.v==='custom'?'block':'none';
+  var v=el.dataset.v;
+  safeGet('price-fixed').style.display=(v==='fixed'||v==='lump')?'grid':'none';
+  safeGet('price-custom').style.display=v==='custom'?'block':'none';
+  var priceLbl=safeGet('f-price-label');
+  if(priceLbl)priceLbl.textContent=v==='lump'?'ราคาเหมาต่อปี — จ่ายครั้งเดียว (บาท)':'ราคาต่อเดือน (บาท)';
 }
 function togglePastMonths(btn){
   var w=safeGet('cg-past-wrap');if(!w)return;
@@ -1774,10 +1870,13 @@ function editItem(gi){
   safeGet('f-cycle').value=s.cycle||'monthly';
   safeGet('f-pricetype').value=s.pricetype||'fixed';
   var isCustom=s.pricetype==='custom';
+  var isLump=s.pricetype==='lump';
   document.querySelectorAll('.cp-opt').forEach(function(e){e.classList.toggle('on',e.dataset.v===(s.cycle||'monthly'));});
   document.querySelectorAll('.pt-opt').forEach(function(e){e.classList.toggle('on',e.dataset.v===(s.pricetype||'fixed'));});
   safeGet('price-fixed').style.display=isCustom?'none':'grid';
   safeGet('price-custom').style.display=isCustom?'block':'none';
+  var priceLbl0=safeGet('f-price-label');
+  if(priceLbl0)priceLbl0.textContent=isLump?'ราคาเหมาต่อปี — จ่ายครั้งเดียว (บาท)':'ราคาต่อเดือน (บาท)';
   buildCustomGrid(s.customPrices||{});
   updateYearlyCancelInfo();
   safeGet('modal').classList.add('open');
