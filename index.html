@@ -287,6 +287,9 @@ body{padding-bottom:32px;max-width:900px;margin:0 auto}
 .hist-row{padding:13px 14px;border-bottom:1px solid var(--bd)}
 .hist-clickable{cursor:pointer;transition:background .15s}
 .hist-clickable:active{background:rgba(192,132,252,.04)}
+.pastbill-list{display:flex;flex-direction:column;gap:6px;max-height:300px;overflow-y:auto}
+.pastbill-opt{background:var(--bg3);border:1.5px solid var(--bd2);border-radius:10px;color:var(--t1);font-size:14px;padding:12px;text-align:left;cursor:pointer;transition:all .15s;font-family:'Inter','IBM Plex Sans Thai',sans-serif}
+.pastbill-opt:active{border-color:rgba(192,132,252,.5);background:rgba(192,132,252,.08)}
 .he-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 2px;border-bottom:1px solid var(--bd)}
 .he-row:last-child{border-bottom:none}
 .he-name{font-size:14px;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
@@ -448,6 +451,7 @@ body{padding-bottom:32px;max-width:900px;margin:0 auto}
 <div class="sec">
   <div class="sec-hdr" onclick="togSec('hist-body','cv-h')">
     <div class="sec-hdr-l"><span class="chev open" id="cv-h">›</span><span class="sec-ttl" style="color:var(--purple)">📅 Billing History</span><span class="sec-cnt" id="cnt-h">0</span></div>
+    <button class="chart-txt-btn" onclick="event.stopPropagation();openPastBillSheet()">＋ ย้อนหลัง</button>
   </div>
   <div class="sec-body" id="hist-body">
     <div class="sec-body-inner">
@@ -543,6 +547,17 @@ body{padding-bottom:32px;max-width:900px;margin:0 auto}
     <div class="modal-acts">
       <button class="btn btn-ghost" onclick="closeModal()">ยกเลิก</button>
       <button class="btn btn-p" onclick="saveItem()">บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAST BILL PICKER -->
+<div class="modal-ov" id="pastbill-modal" onclick="if(event.target===this)closePastBillSheet()">
+  <div class="modal-box">
+    <div class="modal-ttl">เพิ่มรอบบิลย้อนหลัง</div>
+    <div class="pastbill-list" id="pastbill-list"></div>
+    <div class="modal-acts" style="margin-top:16px">
+      <button class="btn btn-ghost" onclick="closePastBillSheet()" style="width:100%">ปิด</button>
     </div>
   </div>
 </div>
@@ -865,6 +880,43 @@ function autoSnapshot(){
   var total=items.reduce(function(a,it){return a+it.price;},0);
   hist[CUR_BP]={total:total,items:items,paid:false,savedAt:new Date().toISOString()};
   saveHist();
+}
+
+function openPastBillSheet(){
+  var el=safeGet('pastbill-list');if(!el)return;
+  // list last 12 billing periods before current that aren't recorded yet
+  var html='';var count=0;
+  for(var i=1;i<=12;i++){
+    var d=new Date(TODAY.getFullYear(),TODAY.getMonth()-i,1);
+    var k=ymk(d.getFullYear(),d.getMonth()+1);
+    if(hist[k])continue;
+    html+='<button class="pastbill-opt" data-key="'+k+'" onclick="createPastBill(this.dataset.key)">'+billingLabel(k)+'</button>';
+    count++;
+  }
+  if(!count)html='<div style="color:var(--t3);font-size:12px;text-align:center;padding:16px">บันทึกครบทุกเดือนแล้ว</div>';
+  el.innerHTML=html;
+  safeGet('pastbill-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closePastBillSheet(){
+  safeGet('pastbill-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function createPastBill(bpKey){
+  var items=[];
+  for(var i=0;i<subs.length;i++){
+    var s=subs[i];
+    if(s.status==='active'){
+      var p=getMonthPrice(s,bpKey);
+      if(p>0)items.push({name:s.name,price:p});
+    }
+  }
+  var total=items.reduce(function(a,it){return a+it.price;},0);
+  hist[bpKey]={total:total,items:items,paid:false,savedAt:new Date().toISOString()};
+  saveHist();
+  render();
+  closePastBillSheet();
+  openHistEdit(bpKey); // เปิดหน้าแก้ไขต่อทันที เผื่อยอดจริงไม่ตรง
 }
 
 var editHistKey='';
